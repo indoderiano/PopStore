@@ -6,13 +6,13 @@
  * @flow strict-local
  */
 
+import 'react-native-gesture-handler'
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
   View,
-  Text,
   StatusBar,
 } from 'react-native';
 
@@ -24,13 +24,41 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import { createStore, applyMiddleware} from 'redux'
+import { Provider} from 'react-redux'
+import Thunk from 'redux-thunk'
+import reducers from './src/redux/reducers'
+
+import { NavigationContainer } from '@react-navigation/native';
+
+import * as eva from '@eva-design/eva';
+import { ApplicationProvider, IconRegistry, Layout, Text } from '@ui-kitten/components';
+import { default as theme } from './custom-theme.json';
+import { default as mapping } from './mapping.json'; // <-- Import app mapping
+
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+
+import AppInit from './AppInit'
+
+
+const store=createStore(reducers,{},applyMiddleware(Thunk))
+
+
 const App = () => {
   return (
-    <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
-      <Text style={{fontSize:20}}>
-        PopStore
-      </Text>
-    </View>
+    <Provider store={store}>
+      <NavigationContainer>
+        <>
+          <IconRegistry icons={EvaIconsPack} />
+          <ApplicationProvider 
+            {...eva} 
+            theme={{...eva.light,...theme}}
+            customMapping={mapping}>
+            <AppInit/>
+          </ApplicationProvider>
+        </>
+      </NavigationContainer>
+    </Provider>
   );
 };
 

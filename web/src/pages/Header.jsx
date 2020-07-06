@@ -6,11 +6,12 @@ import {
     Menu,
     Icon,
     Label,
-    Dropdown
+    Dropdown,
+    Input
   } from 'semantic-ui-react'
 import { connect } from "react-redux";
 import {Link} from 'react-router-dom'
-import {isLogout} from './../redux/actions'
+import {isLogout,LoginUser} from './../redux/actions'
 import {titleConstruct,idr} from '../supports/services'
 import Axios from 'axios';
 import { APIURL } from '../supports/ApiUrl';
@@ -22,8 +23,24 @@ class MainHeader extends Component {
         { key: 1, text: 'Logout', value: 1 ,onClick:()=>{this.props.isLogout()}},
         { key: 2, text: 'Profile', value: 2, as:Link, to:'/profile' },
         { key: 3, text: 'Become A Seller', value: 3, as:Link, to:'/Sellerregister' },
-      ]
+      ],
+      isloginclick: false,
+      username:'',
+      password:'',
      }
+
+    onEnter=(e)=>{
+      if(e.key=='Enter'){
+        var data={
+          username: this.state.username,
+          password: this.state.password
+        }
+        this.props.LoginUser(data)
+        this.setState({isloginclick:false,username:'',password:''})
+      }
+    }
+
+    
     render() { 
         return ( 
             <Menu
@@ -34,7 +51,7 @@ class MainHeader extends Component {
               size={this.props.size}
               style={{backgroundColor:'rgb(27, 28, 29)',margin:'0',padding:'14px 0 0px'}}
             >
-              <Container style={{display:'block'}}>
+              <Container style={{display:'block',height:'54px'}}>
                 <Menu.Item as={Link} to='/' style={style.menu} active>
                   POPSTORE
                 </Menu.Item>
@@ -62,14 +79,40 @@ class MainHeader extends Component {
                 }
                 
 
-                <Menu.Item style={{float:'right',padding:'16px 0 18px'}}>
+                <Menu.Item style={{float:'right',padding:'0',height:'100%'}}>
                   
                   {
                     !this.props.User.islogin?
                     <>
-                      <Button as={Link} to='/login' inverted={!this.props.fixed}>
-                        Log in
-                      </Button>
+                      {
+                        this.state.isloginclick?
+                        <div style={{display:'inline-block'}}>
+                          <Input
+                            placeholder='username'
+                            size='small'
+                            onChange={(e)=>{
+                              this.setState({username:e.target.value})
+                            }}
+                          />
+                          <Input
+                            placeholder='password'
+                            size='small'
+                            type='password'
+                            style={{margin:'0 1em'}}
+                            onChange={(e)=>{
+                              this.setState({password:e.target.value})
+                            }}
+                            onKeyPress={this.onEnter}
+                          />
+                        </div>
+                        :
+                        <Button 
+                          inverted={!this.props.fixed}
+                          onClick={()=>{this.setState({isloginclick:true})}}
+                        >
+                          Log in
+                        </Button>
+                      }
                       <Button as={Link} to='/register' inverted={!this.props.fixed} primary={this.props.fixed} style={{ marginLeft: '0.5em' }}>
                         Sign Up
                       </Button>
@@ -258,4 +301,4 @@ const MapstatetoProps=(state)=>{
     }
 }
  
-export default connect (MapstatetoProps,{isLogout}) (MainHeader);
+export default connect (MapstatetoProps,{isLogout,LoginUser}) (MainHeader);
