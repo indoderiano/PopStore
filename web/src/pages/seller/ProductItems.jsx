@@ -17,7 +17,8 @@ import {
     Icon,
     Divider,
     Dimmer,
-    Loader
+    Loader,
+    Label
 } from 'semantic-ui-react'
 import {idr} from '../../supports/services'
 import {Redirect} from 'react-router-dom'
@@ -40,6 +41,7 @@ class ProductItems extends Component {
             isdeleted: false
         },
         deletecoverimageindex:-1,
+        loadingcoverdelete:false,
         // coverimage:[],
         loadingcoveradd:false,
         editproduct:false,
@@ -47,6 +49,7 @@ class ProductItems extends Component {
         newproductname:'',
         newdescription:'',
         loadingeditproduct:false,
+        loadingprogressproduct:[],
 
         errorcover:'',
 
@@ -58,9 +61,11 @@ class ProductItems extends Component {
         // image:[],
         loadingimageaddid:0,
         loadingedit:false,
+        loadingprogressitem:[],
 
         deleteimageiditem:-1,
         deleteimageindex:-1,
+        loadingimagedelete:false,
 
         errorimage:'',
 
@@ -78,7 +83,7 @@ class ProductItems extends Component {
         
         Axios.get(`${APIURL}/products/get/${this.props.match.params.idproduct}`)
         .then((res)=>{
-            console.log('product data',res.data)
+            // console.log('product data',res.data)
             // CHECK ACCESS
             if(this.props.Seller.idseller==res.data.idseller){
                 this.setState({product:res.data,coverloading:false})
@@ -102,7 +107,7 @@ class ProductItems extends Component {
         })
     }
 
-    onAddCover=(files)=>{
+    onAddCover=async (files,cover,coverids)=>{
         this.setState({loadingcoveradd:true})
         if(files.length>5){
             // error message
@@ -110,47 +115,66 @@ class ProductItems extends Component {
         }else{
             console.log('add cover image')
 
-            var formdata=new FormData()
-
-            for(var image of files){
-                formdata.append('photo',image)
+            // CREATE LOADING PROGRESS VALUE
+            var loadingprogress=[]
+            for(var j=0;j<files.length;j++){
+                loadingprogress[j]=0
             }
+            // console.log('create loading progress',loadingprogress)
+            this.setState({loadingprogressproduct:loadingprogress})
 
-            var data={
-                imagecover:JSON.parse(this.state.product.imagecover),
-                cover_public_id:JSON.parse(this.state.product.cover_public_id),
-                idseller:this.props.Seller.idseller
-            }
+            // for(var image of files){
+            for(var i=0;i<files.length;i++){
 
-            formdata.append('data',JSON.stringify(data))
+                var formdata=new FormData()
 
-            const config = {
-                onUploadProgress: progressEvent => {
-                    // console.log(progressEvent.loaded)
-                    // console.log(progressEvent.total)
-                    var progress = Math.round((progressEvent.loaded * 100.0) / progressEvent.total);
-                    console.log('progress',progress)
-                    this.setState({uploadProgress:progress})
-                },
-                header:{
-                    'Content-Type': 'multipart/form-data',
+                formdata.append('photo',files[i])
+
+                var data={
+                    imagecover: this.isJson(cover),
+                    cover_public_id: this.isJson(coverids),
+                    store: this.props.Seller.namatoko
+                }
+    
+                formdata.append('data',JSON.stringify(data))
+    
+                const config = {
+                    onUploadProgress: progressEvent => {
+                        // console.log(progressEvent.loaded)
+                        // console.log(progressEvent.total)
+                        var progress = Math.round((progressEvent.loaded * 100.0) / progressEvent.total);
+                        console.log('progress',progress)
+                        var loading=this.state.loadingprogressproduct
+                        loading[i]=progress
+                        this.setState({loadingprogressproduct:loading})
+                    },
+                    header:{
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+
+                try{
+                    console.log('add cover image')
+                    var res= await Axios.put(`${APIURL}/products/image/cloudinary/${this.state.product.idproduct}`,formdata,config)
+
+                    document.getElementById('cover').value='' // clear input file image
+                    this.getProduct()
+                    cover=res.data.imagecover
+                    coverids=res.data.cover_public_id
+                }catch(err){
+                    this.setState({loadingcoveradd:false})
+                    console.log(err)
                 }
             }
-    
-            Axios.put(`${APIURL}/products/image/cloudinary/${this.state.product.idproduct}`,formdata,config)
-            .then((res)=>{
-                console.log('berhasil update cover image')
-                this.setState({coverimage:[],loadingcoveradd:false})
-                document.getElementById('cover').value='' // clear input file image
-                this.getProduct()
-            }).catch((err)=>{
-                this.setState({loadingcoveradd:false})
-                console.log(err)
-            })
+            console.log('berhasil update cover image')
+            this.setState({coverimage:[],loadingcoveradd:false})
+
         }
     }
 
     onDeleteCover=(index,oldids,oldcover)=>{
+
+        this.setState({loadingcoverdelete:true})
 
         var data={
             imagecover: oldcover,
@@ -164,6 +188,8 @@ class ProductItems extends Component {
             this.getProduct()
         }).catch((err)=>{
             console.log(err)
+        }).finally(()=>{
+            this.setState({loadingcoverdelete:false})
         })
 
     }
@@ -218,55 +244,75 @@ class ProductItems extends Component {
 
     }
 
-    onAddPhoto=(files,iditem,oldimage,oldids)=>{
+    onAddPhoto=async (files,iditem,image,image_public_id)=>{
         this.setState({loadingimageaddid:iditem})
         if(files.length>5){
             // error message
             this.setState({errorimage:'Jumlah upload image tidak bisa lebih dari 5',loadingimageaddid:0})
         }else{
-            console.log('add image')
 
-            var formdata=new FormData()
+            // CREATE LOADING PROGRESS VALUE
+            var loadingprogress=[]
+            for(var j=0;j<files.length;j++){
+                loadingprogress[j]=0
+            }
+            // console.log('create loading progress',loadingprogress)
+            this.setState({loadingprogressitem:loadingprogress})
+            
+            // for(var file of files){
+            for(var i=0;i<files.length;i++){
+                console.log('add image')
+                
+                var formdata=new FormData()
 
-            for(var image of files){
-                formdata.append('photo',image)
+                formdata.append('photo',files[i])
+
+                var data={
+                    image: this.isJson(image),
+                    image_public_id: this.isJson(image_public_id),
+                    store: this.props.Seller.namatoko
+                }
+    
+                formdata.append('data',JSON.stringify(data))
+    
+                const config = {
+                    onUploadProgress: progressEvent => {
+                        // console.log(progressEvent.loaded)
+                        // console.log(progressEvent.total)
+                        var progress = Math.round((progressEvent.loaded * 100.0) / progressEvent.total);
+                        console.log('progress',progress)
+                        var loading=this.state.loadingprogressitem
+                        loading[i]=progress
+                        this.setState({loadingprogressitem:loading})
+                    },
+                    header:{
+                        'Content-Type': 'multipart/form-data',
+                    }
+                }
+
+                try{
+                    var res = await Axios.put(`${APIURL}/items/image/cloudinary/${iditem}`,formdata,config)
+
+                    image=res.data.image
+                    image_public_id=res.data.image_public_id
+                    this.getItems()
+                }catch(err){
+                    this.setState({loadingimageaddid:0})
+                    console.log(err)
+                }
+                    
             }
             
-            var data={
-                oldimage,
-                oldids
-            }
-
-            formdata.append('data',JSON.stringify(data))
-
-            const config = {
-                onUploadProgress: progressEvent => {
-                    // console.log(progressEvent.loaded)
-                    // console.log(progressEvent.total)
-                    var progress = Math.round((progressEvent.loaded * 100.0) / progressEvent.total);
-                    console.log('progress',progress)
-                    // this.setState({uploadProgress:progress})
-                },
-                header:{
-                    'Content-Type': 'multipart/form-data',
-                }
-            }
-    
-            Axios.put(`${APIURL}/items/image/cloudinary/${iditem}`,formdata,config)
-            .then((res)=>{
-                console.log('berhasil update item')
-                this.setState({image:[],loadingimageaddid:0})
-                document.getElementById(iditem).value=''
-                this.getItems()
-            }).catch((err)=>{
-                this.setState({loadingimageaddid:0})
-                console.log(err)
-            })
+            console.log('berhasil update item')
+            this.setState({image:[],loadingimageaddid:0})
+            document.getElementById(iditem).value=''
         }
 
     }
 
     onDeletePhoto=(iditem,index,imageids,image)=>{
+
+        this.setState({loadingimagedelete:true})
 
         var data={
             image,
@@ -280,6 +326,8 @@ class ProductItems extends Component {
             this.getItems()
         }).catch((err)=>{
             console.log(err)
+        }).finally(()=>{
+            this.setState({loadingimagedelete:false})
         })
     }
 
@@ -318,6 +366,36 @@ class ProductItems extends Component {
         }catch{
             return []
         }
+    }
+
+    renderuploadproductprogress=()=>{
+        // COUNT PROGRESS
+        var progress=0
+        this.state.loadingprogressproduct.forEach((val)=>{
+            progress+=val/2/this.state.loadingprogressproduct.length
+
+            // UPLOAD CLOUDINARY PROGRESS
+            // FIX ALGORITHM (MADE UP VALUE)
+            if(val==100&&progress>100/2/this.state.loadingprogressproduct.length){
+                progress+=100/2/this.state.loadingprogressproduct.length
+            }
+        })
+        return (
+            <Label
+                style={{
+                    position:'absolute',
+                    top:'0',
+                    left:'0',
+                    width:`${progress}%`,
+                    height:'2px',
+                    // backgroundColor:'blue',
+                    transition:'all ease .3s',
+                    padding:'0',
+                    margin:'0'
+                }}
+                color='blue'
+            />
+        )
     }
 
     renderProduct=()=>{
@@ -367,6 +445,12 @@ class ProductItems extends Component {
                                                     onClick={()=>{this.onDeleteCover(index,coverids,coverimages)}}
                                                 >
                                                     Confirm
+                                                    <Dimmer 
+                                                        active={index==this.state.deletecoverimageindex&&this.state.loadingcoverdelete}
+                                                        inverted
+                                                    >
+                                                        <Loader inverted>Deleting</Loader>
+                                                    </Dimmer>
                                                 </Button>
                                                 :
                                                 <Button 
@@ -405,6 +489,9 @@ class ProductItems extends Component {
                         <Grid.Column width={16} style={{margin:'1em 0',padding:'0'}}>
                             <Segment
                                 placeholder
+                                style={{
+                                    minHeight:'unset'
+                                }}
                                 onDragEnter={(e)=>{
                                     e.stopPropagation()
                                     e.preventDefault()
@@ -417,8 +504,9 @@ class ProductItems extends Component {
                                     e.stopPropagation()
                                     e.preventDefault()
                                     var files=e.dataTransfer.files
+                                    console.log(files)
                                     if(files){
-                                        this.onAddCover(files)
+                                        this.onAddCover(files,this.state.product.imagecover,this.state.product.cover_public_id)
                                     }
                                 }}
                             >
@@ -427,7 +515,7 @@ class ProductItems extends Component {
                                         flex:1,
                                         border:'3px solid rgba(0,0,0,.6)',
                                         borderStyle: 'dashed',
-                                        padding:'2em 0',
+                                        padding:'1em 0',
                                         display:'flex',
                                         flexDirection:'column',
                                         justifyContent:'center',
@@ -436,25 +524,40 @@ class ProductItems extends Component {
                                     }}
                                 >
                                     <Icon name='download' size='big'/>
-                                    <div style={{fontSize:'18px',fontWeight:'800',margin:'1em 0'}}>
+                                    <div style={{fontSize:'14px',fontWeight:'800',margin:'.5em 0'}}>
                                         Drag And Drop Images Here
                                     </div>
-                                    <div style={{color:'rgba(0,0,0,.8)',fontSize:'18px',fontWeight:'800',margin:'0em 0 1em'}}>
+                                    <div style={{color:'rgba(0,0,0,.8)',fontSize:'14px',fontWeight:'800',margin:'0em 0 .5em'}}>
                                         Or
                                     </div>
                                     <Input
                                         type='file'
                                         id='cover'
                                         multiple
+                                        size='small'
                                         style={{marginRight:'1em'}}
                                         onChange={(e)=>{
-                                            if(e.target.files){
-                                                // console.log(e.target.files)
-                                                // this.setState({coverimage:e.target.files})
-                                                this.onAddCover(e.target.files)
+                                            // CONVERT INTO ARRAY
+                                            var files=[]
+                                            for(var file of e.target.files){
+                                                files.push(file)
+                                            }
+
+                                            // var files=e.target.files
+                                            if(files){
+                                                // console.log(files)
+                                                // this.setState({coverimage:files})
+                                                this.onAddCover(files,this.state.product.imagecover,this.state.product.cover_public_id)
                                             }
                                         }}
                                     />
+                                    <Dimmer 
+                                        active={this.state.loadingcoveradd} 
+                                        inverted
+                                    >
+                                        <Loader inverted>Uploading Image(s)</Loader>
+                                        {this.renderuploadproductprogress()}
+                                    </Dimmer>
                                 </Container>
                             </Segment>
                             {/* <Button
@@ -620,32 +723,19 @@ class ProductItems extends Component {
                                             <div 
                                                 style={{
                                                     paddingTop:'80%',
-                                                    backgroundImage:`url('${APIURL+image}')`,
+                                                    backgroundImage:`url('${image}')`,
                                                     backgroundSize:'contain',
                                                     backgroundRepeat:'no-repeat',
                                                     backgroundPosition:'center',
                                                     marginBottom:'1em'
                                                 }}
                                             />
-                                            {
-                                                index===this.state.deletecoverimageindex?
-                                                <Button 
-                                                    basic
-                                                    color='red'
-                                                    onClick={()=>{this.onDeleteCover(index,coverimages)}}
-                                                >
-                                                    Confirm
-                                                </Button>
-                                                :
-                                                <Button 
-                                                    disabled
-                                                    basic
-                                                    onClick={()=>{this.setState({deletecoverimageindex:index})}}
-                                                >
-                                                    Remove
-                                                </Button>
-
-                                            }
+                                            <Button 
+                                                disabled
+                                                basic
+                                            >
+                                                Remove
+                                            </Button>
                                         </Segment>
                                     </Grid.Column>
                                 )
@@ -671,7 +761,7 @@ class ProductItems extends Component {
                             </Grid.Column>
                         }
                         
-                        <Grid.Column width={16} style={{margin:'1em 0',padding:'0'}}>
+                        {/* <Grid.Column width={16} style={{margin:'1em 0',padding:'0'}}>
                             <Input 
                                 disabled
                                 type='file'
@@ -694,7 +784,7 @@ class ProductItems extends Component {
                             >
                                 Add
                             </Button>
-                        </Grid.Column>
+                        </Grid.Column> */}
                         <div style={{
                             position:'absolute',
                             top:'0',
@@ -792,19 +882,39 @@ class ProductItems extends Component {
         )
     }
 
-    renderItems=()=>{
-        // const isJson=(data)=>{
-        //     try{
-        //         if(data==null||data==''){
-        //             return []
-        //         }
-        //         return JSON.parse(data)
-        //     }catch{
-        //         return []
-        //     }
-        // }
-        return this.state.items.map((item,index)=>{
+    renderuploaditemprogress=()=>{
+        // COUNT PROGRESS
+        var progress=0
+        this.state.loadingprogressitem.forEach((val)=>{
+            progress+=val/2/this.state.loadingprogressitem.length
 
+            // UPLOAD CLOUDINARY PROGRESS
+            // FIX ALGORITHM (MADE UP VALUE)
+            if(val==100&&progress>100/2/this.state.loadingprogressitem.length){
+                progress+=100/2/this.state.loadingprogressitem.length
+            }
+        })
+        return (
+            <Label
+                style={{
+                    position:'absolute',
+                    top:'0',
+                    left:'0',
+                    width:`${progress}%`,
+                    height:'2px',
+                    // backgroundColor:'blue',
+                    transition:'all ease .3s',
+                    padding:'0',
+                    margin:'0'
+                }}
+                color='blue'
+            />
+        )
+    }
+
+    renderItems=()=>{
+        return this.state.items.map((item,index)=>{
+            // console.log(item.image)
             const type=this.isJson(item.type)
             const image=this.isJson(item.image)
             const imageids=this.isJson(item.image_public_id)
@@ -897,6 +1007,12 @@ class ProductItems extends Component {
                                                             onClick={()=>{this.onDeletePhoto(item.iditem,index,imageids,image)}}
                                                         >
                                                             Confirm
+                                                            <Dimmer 
+                                                                active={item.iditem===this.state.deleteimageiditem&&index===this.state.deleteimageindex&&this.state.loadingimagedelete}
+                                                                inverted
+                                                            >
+                                                                <Loader inverted>Deleting</Loader>
+                                                            </Dimmer>
                                                         </Button>
                                                         :
                                                         <Button 
@@ -971,6 +1087,9 @@ class ProductItems extends Component {
                             <Grid.Column width={16} style={{margin:'1em 0',padding:'0'}}>
                                 <Segment
                                     placeholder
+                                    style={{
+                                        minHeight:'unset'
+                                    }}
                                     onDragEnter={(e)=>{
                                         e.stopPropagation()
                                         e.preventDefault()
@@ -984,7 +1103,7 @@ class ProductItems extends Component {
                                         e.preventDefault()
                                         var files=e.dataTransfer.files
                                         if(files){
-                                            this.onAddPhoto(files,item.iditem,image,this.isJson(item.image_public_id))
+                                            this.onAddPhoto(files,item.iditem,item.image,item.image_public_id)
                                         }
                                     }}
                                 >
@@ -993,7 +1112,7 @@ class ProductItems extends Component {
                                             flex:1,
                                             border:'3px solid rgba(0,0,0,.6)',
                                             borderStyle: 'dashed',
-                                            padding:'2em 0',
+                                            padding:'1em 0',
                                             display:'flex',
                                             flexDirection:'column',
                                             justifyContent:'center',
@@ -1002,25 +1121,37 @@ class ProductItems extends Component {
                                         }}
                                     >
                                         <Icon name='download' size='big'/>
-                                        <div style={{fontSize:'18px',fontWeight:'800',margin:'1em 0'}}>
+                                        <div style={{fontSize:'14px',fontWeight:'800',margin:'.5em 0'}}>
                                             Drag And Drop Images Here
                                         </div>
-                                        <div style={{color:'rgba(0,0,0,.8)',fontSize:'18px',fontWeight:'800',margin:'0em 0 1em'}}>
+                                        <div style={{color:'rgba(0,0,0,.8)',fontSize:'14px',fontWeight:'800',margin:'0em 0 .5em'}}>
                                             Or
                                         </div>
                                         <Input 
                                             type='file'
                                             id={item.iditem}
                                             multiple
+                                            size='small'
                                             style={{marginRight:'1em'}}
                                             onChange={(e)=>{
-                                                if(e.target.files){
-                                                    // console.log(e.target.files)
-                                                    // this.setState({image:e.target.files})
-                                                    this.onAddPhoto(e.target.files,item.iditem,image,this.isJson(item.image_public_id))
+                                                var files= []
+                                                
+                                                for(var file of e.target.files){
+                                                    files.push(file)
+                                                }
+                                                if(files){
+                                                    // this.setState({image:files})
+                                                    this.onAddPhoto(files,item.iditem,item.image,item.image_public_id)
                                                 }
                                             }}
                                         />
+                                        <Dimmer 
+                                            active={item.iditem==this.state.loadingimageaddid}
+                                            inverted
+                                        >
+                                            <Loader inverted>Uploading Image(s)</Loader>
+                                            {this.renderuploaditemprogress()}
+                                        </Dimmer>
                                     </Container>
                                 </Segment>
                                 {/* <Button
@@ -1095,11 +1226,11 @@ class ProductItems extends Component {
                                     </Grid.Column>
                                     <Grid.Column width={16} style={{marginBottom:'1em'}}>
                                         <span >Harga:</span>
-                                        <span style={{fontWeight:600,marginLeft:'.5em'}}>{item.price?idr(item.price):'Not Yet'}</span>
+                                        <span style={{fontWeight:600,marginLeft:'.5em'}}>{item.price?idr(item.price):'Null'}</span>
                                     </Grid.Column>
                                     <Grid.Column width={16} style={{marginBottom:'1em'}}>
                                         <span >Stock:</span>
-                                        <span style={{fontWeight:600,marginLeft:'.5em'}}>{item.stock?item.stock:'Not Yet'}</span>
+                                        <span style={{fontWeight:600,marginLeft:'.5em'}}>{item.stock?item.stock:'Null'}</span>
                                     </Grid.Column>
                                     
                                     <Grid.Column width={16} style={{textAlign:'right'}}>

@@ -138,10 +138,10 @@ module.exports={
         const{iditem}=req.params
 
         const data = JSON.parse(req.body.data)
-        console.log(data)
+        // console.log(data)
 
-        var newimage=data.oldimage==null||data.oldimage==""?[]:data.oldimage
-        var newimageids=data.oldids==null||data.oldids==""?[]:data.oldids
+        var newimage=data.image==null||data.image==""?[]:data.image
+        var newimageids=data.image_public_id==null||data.image_public_id==""?[]:data.image_public_id
 
         // UPLOAD IMAGE TO CLOUDINARY
         console.log('upload to cloudinary')
@@ -152,7 +152,7 @@ module.exports={
             try{
                 var image = await cloudinary.uploader.upload(`data:image/png;base64,${encoded}`,
                 {
-                    folder: `popstore/store/${data.idseller}/`,
+                    folder: `popstore/store/${data.store}/`,
                     use_filename: true,
                 })
 
@@ -181,11 +181,13 @@ module.exports={
             updateat: new Date()
         }
 
+        console.log('update',update)
+
         var sql=`update items set ? where iditem=${iditem}`
         db.query(sql,update,(err,updated)=>{
             if(err) return res.status(500).send(err)
             console.log('update item berhasil')
-            res.status(200).send(updated)
+            res.status(200).send(update)
         })
 
     },

@@ -58,7 +58,7 @@ module.exports={
             try{
                 var image = await cloudinary.uploader.upload(`data:image/png;base64,${encoded}`,
                 {
-                    folder: `popstore/store/${data.idseller}/`,
+                    folder: `popstore/store/${data.store}/`,
                     use_filename: true,
                 })
 
@@ -200,7 +200,7 @@ module.exports={
             try{
                 var image = await cloudinary.uploader.upload(`data:image/png;base64,${encoded}`,
                 {
-                    folder: `popstore/store/${data.idseller}/`,
+                    folder: `popstore/store/${data.store}/`,
                     use_filename: true,
                 })
 
@@ -233,7 +233,7 @@ module.exports={
         db.query(sql,update,(err,updated)=>{
             if(err) return res.status(500).send(err)
             console.log('update cover berhasil')
-            res.status(200).send(updated)
+            res.status(200).send(update)
         })
 
 
