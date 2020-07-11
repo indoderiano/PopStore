@@ -1,6 +1,9 @@
 const express=require('express')
 const {TransactionControllers}=require('../controllers')
 
+const multer  = require('multer')
+const upload = multer({})
+
 const Router=express.Router()
 
 
@@ -15,6 +18,8 @@ Router.put('/:idtransaction',TransactionControllers.update)
 
 Router.get('/seller',TransactionControllers.sellerGetStatus)
 Router.get('/admin',TransactionControllers.adminGetStatus)
+
+Router.post('/paymentproof/cloudinary/:idtransaction',upload.single('image'),TransactionControllers.cloudinaryUpload)
 
 
 module.exports=Router

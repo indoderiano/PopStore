@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Image, Button, Segment, Header, Card, Icon, Rating } from 'semantic-ui-react';
 import Flashsale from '../component/FlashsaleHome'
 import { NavLink, Link } from 'react-router-dom';
+import MenPic from '../assets/images/Men.jpg'
 import Axios from 'axios';
 import { APIURL } from '../supports/ApiUrl';
 
@@ -119,7 +120,8 @@ class Home extends Component {
 
                       <Grid.Column width={8} style={{padding:'0',height:'350px',overflow:'hidden'}}>
                           <Image 
-                            src='/images/men.jpg'
+                            // src='/images/men.jpg'
+                            src={MenPic}
                             style={{
                               minHeight:'100%',
                               maxHeight:'115%',

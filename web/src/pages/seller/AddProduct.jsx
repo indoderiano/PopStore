@@ -14,7 +14,8 @@ import {
     TextArea,
     Checkbox,
     Sidebar,
-    Dropdown
+    Dropdown,
+    Icon
 } from 'semantic-ui-react'
 import {Redirect} from 'react-router-dom'
 import SidebarSeller from './componentseller/sidebar'
@@ -37,6 +38,7 @@ class AddProduct extends Component {
 
         // INPUT
         fileImage:[],
+        previewImageSrc:[],
         idcategory:0,
         category:'',
         idmerk:99,
@@ -60,6 +62,7 @@ class AddProduct extends Component {
 
         // STATE
         message:'',
+        uploadProgress:0,
 
         // FOR REDIRECT PAGE
         newidproduct:0,
@@ -117,9 +120,6 @@ class AddProduct extends Component {
 
 
     onSubmit=()=>{
-
-        // NEED TO ADD PROTECTION
-        // ONLY SELLER CAN SUBMIT
         
         if(!this.state.productName || !this.state.description || !this.state.category || !this.state.fileImage.length || !this.state.idcategory){
             this.setState({message:'Masih ada kolom yang harus diisi'})
@@ -162,13 +162,21 @@ class AddProduct extends Component {
 
             formdata.append('data',JSON.stringify(product))
 
-
-
-            Axios.post(`${APIURL}/products`,formdata,{
-                headers: {
-                    'Content-Type': 'undefined'
+            const config = {
+                onUploadProgress: progressEvent => {
+                    // console.log(progressEvent.loaded)
+                    // console.log(progressEvent.total)
+                    var progress = Math.round((progressEvent.loaded * 100.0) / progressEvent.total);
+                    console.log('progress',progress)
+                    this.setState({uploadProgress:progress})
+                },
+                header:{
+                    'Content-Type': 'multipart/form-data',
                 }
-            }).then((newproduct)=>{
+            }
+
+            Axios.post(`${APIURL}/products/cloudinary`,formdata,config)
+            .then((newproduct)=>{
                 console.log('upload product berhasil')
 
                 console.log('creating items')
@@ -196,59 +204,8 @@ class AddProduct extends Component {
                 })
             }).catch((err)=>{
                 console.log(err)
+                this.setState({loading:false})
             })
-        }
-    }
-
-
-    // CURRENTLY NOT BEING USED
-    onSubmitProduct=()=>{
-        var product={
-            product_name: this.state.productName,
-            description: this.state.description,
-            variant: JSON.stringify(this.state.varieties),
-            idseller: 2, // need to update this to sellerid once redux is finished
-            idcategory: 2, // need to update once category table is done
-        }
-
-        console.log(product)
-
-        if(!this.state.productName || !this.state.description || !this.state.category){
-            this.setState({message:'Masih ada kolom yang harus diisi'})
-        }else{
-            console.log('creating product')
-    
-            Axios.post(`${APIURL}/products`,product)
-            .then((res)=>{
-                console.log('upload product berhasil')
-
-                console.log('creating items')
-                console.log('product id')
-                console.log(res.data.insertId)
-
-                console.log('variety types')
-                console.log(this.state.varietytypes)
-
-                var data={
-                    idproduct: res.data.insertId,
-                    // types: this.state.varietytypes,
-                    types: this.createitems()
-                    // price and stock will be updated on the next page
-                }
-
-                Axios.post(`${APIURL}/items`,data)
-                .then((res)=>{
-                    console.log('upload item berhasil')
-                    console.log(res.data)
-                }).catch((err)=>{
-                    console.log(err)
-                })
-
-
-            }).catch((err)=>{
-                console.log(err)
-            })
-
         }
     }
 
@@ -532,7 +489,7 @@ class AddProduct extends Component {
                         </Segment>
                         <Segment style={{width:'100%'}}>
                             <Header as={'h3'}>Cover Photo</Header>
-                            <Input 
+                            {/* <Input 
                                 type='file'
                                 // id={item.iditem}
                                 multiple
@@ -543,7 +500,111 @@ class AddProduct extends Component {
                                         this.setState({fileImage:e.target.files})
                                     }
                                 }}
-                            />
+                            /> */}
+
+                            <Segment 
+                                placeholder
+                                onDragEnter={(e)=>{
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                }}
+                                onDragOver={(e)=>{
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                }}
+                                onDrop={(e)=>{
+                                    e.stopPropagation()
+                                    e.preventDefault()
+                                    // e.dataTransfer.files
+                                    var files=e.dataTransfer.files
+                                    if(files){
+                                        console.log(files)
+                                        this.setState({fileImage:files})
+
+                                        // PREVIEW IMAGES
+                                        
+                                        for(var i=0;i<files.length;i++){
+                                            var previewImageSrc=[]
+                                            let reader=new FileReader()
+                                            reader.onload=(onload)=>{
+                                                // console.log('onload target result',onload.target.result)
+                                                previewImageSrc[previewImageSrc.length]=onload.target.result
+                                                this.setState({previewImageSrc})
+                                            }
+                                            reader.readAsDataURL(files[i])
+                                        }
+                                    }
+                                }}
+                            >
+                                <Container 
+                                    style={{
+                                        flex:1,
+                                        border:'3px solid rgba(0,0,0,.6)',
+                                        borderStyle: 'dashed',
+                                        padding:'2em 0',
+                                        display:'flex',
+                                        flexDirection:'column',
+                                        justifyContent:'center',
+                                        alignItems:'center',
+                                        color:'rgba(0,0,0,.6)'
+                                    }}
+                                >
+                                    <Icon name='download' size='big'/>
+                                    <div style={{fontSize:'18px',fontWeight:'800',margin:'1em 0'}}>
+                                        Drag And Drop Images Here
+                                    </div>
+                                    <div style={{color:'rgba(0,0,0,.8)',fontSize:'18px',fontWeight:'800',margin:'0em 0 1em'}}>
+                                        Or
+                                    </div>
+                                    <Input 
+                                        type='file'
+                                        // id={item.iditem}
+                                        multiple
+                                        style={{marginRight:'1em'}}
+                                        onChange={(e)=>{
+                                            var files=e.target.files
+                                            if(files){
+                                                console.log(files)
+                                                this.setState({fileImage:files})
+
+                                                // PREVIEW
+                                                var previewImageSrc=[]
+                                                for(var i=0;i<files.length;i++){
+                                                    let reader=new FileReader()
+                                                    reader.onload=(e)=>{
+                                                        previewImageSrc[previewImageSrc.length]=e.target.result
+                                                        // previewImageSrc.push(e.target.result)
+                                                        this.setState({previewImageSrc})
+                                                    }
+                                                    reader.readAsDataURL(files[i])
+                                                }
+                                            }
+                                        }}
+                                    />
+                                    {
+                                        this.state.previewImageSrc.length?
+                                        <div style={{margin:'1em 0 .5em',color:'rgba(0,0,0,.6)'}}>
+                                            <Header as={'h4'} style={{color:'rgba(0,0,0,.6)',margin:'0'}}>Preview</Header>
+                                            {
+                                                this.state.previewImageSrc.map((src,index)=>{
+                                                    return (
+                                                        <Image 
+                                                            key={index} 
+                                                            src={src} 
+                                                            size='small'
+                                                            style={{
+                                                                display:'inline-block',
+                                                                margin:'.5em'
+                                                            }}
+                                                        />
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                        : null
+                                    }
+                                </Container>
+                            </Segment>
                         </Segment>
                         <Segment style={{width:'100%'}}>
                             <Header as={'h3'}>Product Name</Header>

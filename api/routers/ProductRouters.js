@@ -1,13 +1,22 @@
 const express=require('express')
 const {ProductControllers}=require('../controllers')
+const multer  = require('multer')
+const upload = multer({})
 
 const Router=express.Router()
 
 // Router.get('/productseller',ProductControllers.productseller)               //get all products for seller page
-Router.post('/',ProductControllers.add)
-Router.get('/get/:idproduct',ProductControllers.get)            //???
-Router.put('/image/:idproduct',ProductControllers.addcover)
+Router.post('/',ProductControllers.add) // UPLOAD IMAGE TO API
+Router.post('/cloudinary',upload.array('photo'),ProductControllers.create) // UPLOAD IMAGE TO CLOUDINARY
+
+Router.get('/get/:idproduct',ProductControllers.get)
+
+Router.put('/image/:idproduct',ProductControllers.addcover) // UPLOAD IMAGE TO API 
+Router.put('/image/cloudinary/:idproduct',upload.array('photo'),ProductControllers.addCoverToCloudinary)
+
 Router.put('/image/:idproduct/:index',ProductControllers.deletecover)
+Router.put('/image/cloudinary/:idproduct/:index',ProductControllers.deleteCoverFromCloudinary)
+
 Router.put('/:idproduct',ProductControllers.edit)
 Router.put('/sold/:idproduct',ProductControllers.countSold)
 Router.get('/search/:keyword',ProductControllers.searchproduct)

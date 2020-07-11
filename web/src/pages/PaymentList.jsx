@@ -56,7 +56,8 @@ class PaymentList extends Component {
         clearTimeout(this.state.timeout)
     }
 
-    onUpload=()=>{
+    // IMAGE IS CONVERTED TO BASE64
+    onUpload=async ()=>{
         console.log(this.state.filepaymentproof)
         if(!this.state.filepaymentproof){
             this.setState({errormessage:'Please select an image file'})
@@ -69,25 +70,63 @@ class PaymentList extends Component {
                 }
             }
 
+            console.log('file image')
+            console.log(this.state.filepaymentproof)
+
             formdata.append('image',this.state.filepaymentproof)
 
 
-            Axios.post(`${APIURL}/transactions/paymentproof/${this.state.uploadid}`,formdata,Headers)
+            Axios.post(`${APIURL}/transactions/paymentproof/cloudinary/${this.state.uploadid}`,formdata,Headers)
             .then((uploaded)=>{
-                console.log('payment proof uploaded')
-                this.props.LoadPayment(this.props.User.iduser)
 
-                var delay = setTimeout(()=>{
-                    this.setState({isuploaded:false})
-                },4000)
-                this.setState({isuploaded:true,timeout:delay})
+                console.log('payment proof uploaded')
+                // this.props.LoadPayment(this.props.User.iduser)
+
+                // var delay = setTimeout(()=>{
+                //     this.setState({isuploaded:false})
+                // },4000)
+                // this.setState({isuploaded:true,timeout:delay})
 
             }).catch((err)=>{
                 console.log(err)
             })
 
+
         }
     }
+
+    // onUpload=()=>{
+    //     console.log(this.state.filepaymentproof)
+    //     if(!this.state.filepaymentproof){
+    //         this.setState({errormessage:'Please select an image file'})
+    //     }else{
+    //         var formdata= new FormData()
+
+    //         var Headers={
+    //             header:{
+    //                 'Content-Type': 'multipart/form-data',
+    //             }
+    //         }
+
+    //         formdata.append('image',this.state.filepaymentproof)
+
+
+    //         Axios.post(`${APIURL}/transactions/paymentproof/${this.state.uploadid}`,formdata,Headers)
+    //         .then((uploaded)=>{
+    //             console.log('payment proof uploaded')
+    //             this.props.LoadPayment(this.props.User.iduser)
+
+    //             var delay = setTimeout(()=>{
+    //                 this.setState({isuploaded:false})
+    //             },4000)
+    //             this.setState({isuploaded:true,timeout:delay})
+
+    //         }).catch((err)=>{
+    //             console.log(err)
+    //         })
+
+    //     }
+    // }
 
     CancelTransaction=(idtransaction,transaction)=>{
         Axios.put(`${APIURL}/transactions/${idtransaction}`,{idstatus:5})
