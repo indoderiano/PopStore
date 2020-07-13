@@ -15,6 +15,7 @@ class Home extends Component {
   componentDidMount(){
       Axios.get(`${APIURL}/products/mostviewed`)
       .then((res)=>{
+        console.log(res)
         this.setState({
           mostViewedProducts:res.data.mostviewed,
           recommendedProducts:res.data.recommended
@@ -60,6 +61,7 @@ class Home extends Component {
   }
 
   renderRecommended=()=>{
+    console.log(this.state.recommendedProducts)
     if(this.state.recommendedProducts.length){
       return this.state.recommendedProducts.map((val,index)=>{
             return (                  
