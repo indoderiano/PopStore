@@ -15,9 +15,9 @@ app.use(bearertoken())
 app.use(cors())
 
 
-app.get('/',(req,res)=>{
-    return res.send("<h1 style='text-align:center; margin-top:100px;'>Final Project JC 12</h1>")
-})
+// app.get('/',(req,res)=>{
+//     return res.send("<h1 style='text-align:center; margin-top:100px;'>Final Project JC 12</h1>")
+// })
 
 
 const {
