@@ -124,7 +124,7 @@ app.post('/merk',(req,res)=>{
 // FRONT-END
 // REACT BUILD
 // ref https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
-app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, '/web/build')));
 app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '/web/build', 'index.html'));
 });
