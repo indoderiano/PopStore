@@ -1,4 +1,5 @@
 const express=require('express')
+const path=require('path')
 const bodyParser=require('body-parser')
 const cors=require('cors')
 const bearertoken=require('express-bearer-token')
@@ -118,6 +119,15 @@ app.post('/merk',(req,res)=>{
     })
 
 })
+
+
+// FRONT-END
+// REACT BUILD
+// ref https://www.freecodecamp.org/news/deploy-a-react-node-app-to/
+app.use(express.static(path.join(__dirname, 'build')));
+app.get('/*', (req, res) => {
+    res.sendFile(path.join(__dirname, '/web/build', 'index.html'));
+});
 
 
 app.listen(PORT,()=>console.log('API is online at port '+PORT))
