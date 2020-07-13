@@ -2,20 +2,7 @@ import React ,{Component} from 'react'
 import Axios from 'axios'
 import {APIURL} from '../../supports/ApiUrl'
 import {
-    Grid,
-    Header,
-    Image,
-    Form,
-    Segment,
-    Button,
-    Message,
     Container,
-    Input,
-    TextArea,
-    Checkbox,
-    Icon,
-    Divider,
-    Dropdown,
     Tab,
     Menu,
     Label

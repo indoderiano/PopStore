@@ -5,21 +5,11 @@ import {
     Grid,
     Header,
     Image,
-    Form,
     Segment,
     Button,
     Message,
     Container,
-    Input,
-    TextArea,
-    Checkbox,
-    Icon,
-    Divider,
-    Modal,
-    Dropdown,
-    Tab,
-    Menu,
-    Label
+    Modal
 } from 'semantic-ui-react'
 import Payment from '../Payment'
 import {Link} from 'react-router-dom'
@@ -141,7 +131,7 @@ class PaymentList extends Component {
                                 <div
                                     style={{
                                         paddingTop:'100%',
-                                        backgroundImage:`url(${APIURL+JSON.parse(transaction.paymentproof)})`,
+                                        backgroundImage:`url(${JSON.parse(transaction.paymentproof)})`,
                                         backgroundSize:'contain',
                                         backgroundRepeat:'no-repeat',
                                         backgroundPosition:'center',

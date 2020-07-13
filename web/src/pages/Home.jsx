@@ -34,7 +34,7 @@ class Home extends Component {
             <div key={index} style={{width:'22%', marginLeft:12, marginRight:12, marginBottom:20}}>
                 <Link to={`/product/${val.idproduct}`}>
                     <Card raised style={{ paddingTop:5, height:'100%'}}>
-                            <Image src={APIURL+ JSON.parse(val.imagecover)[0]} style={{height:'150px' }}/>
+                            <Image src={val.imagecover?JSON.parse(val.imagecover)[0]:''} style={{height:'150px' }}/>
                         {/* <a style={{alignSelf:'center'}}>
                         </a> */}
                         <Card.Content style={{borderColor: 'transparent',}} >
@@ -66,7 +66,7 @@ class Home extends Component {
               <div key={index} style={{width:'22%', marginLeft:12, marginRight:12, marginBottom:20}}>
                   <Link to={`/product/${val.idproduct}`}>
                       <Card raised style={{ paddingTop:5, height:'100%'}}>
-                              <Image src={APIURL+ JSON.parse(val.imagecover)[0]} style={{height:'150px' }}/>
+                              <Image src={val.imagecover?JSON.parse(val.imagecover)[0]:''} style={{height:'150px' }}/>
                           {/* <a style={{alignSelf:'center'}}>
                           </a> */}
                           <Card.Content style={{borderColor: 'transparent',}} >

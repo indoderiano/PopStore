@@ -2,31 +2,15 @@ import React ,{Component} from 'react'
 import Axios from 'axios'
 import {APIURL} from '../../supports/ApiUrl'
 import {
-    Grid,
-    Header,
-    Image,
-    Form,
-    Segment,
-    Button,
-    Message,
     Container,
-    Input,
-    TextArea,
-    Checkbox,
-    Icon,
-    Divider,
-    Dropdown,
     Tab,
-    Menu,
-    Label
+    Menu
 } from 'semantic-ui-react'
 import FlashsalesData from './FlashsalesData'
 import FlashsaleRequest from './FlashsaleRequest'
 import FlashsaleActive from './FlashsaleActive'
-import {Link} from 'react-router-dom'
 import {titleConstruct,isJson} from '../../supports/services'
 import {LoadCart,UpdateCheckout,CountTotalCharge,CountTotalPayment} from '../../redux/actions'
-import {Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
 
 

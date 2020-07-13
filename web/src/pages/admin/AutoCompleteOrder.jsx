@@ -5,21 +5,13 @@ import {
     Grid,
     Header,
     Image,
-    Form,
     Segment,
     Button,
     Message,
     Container,
-    Input,
-    TextArea,
-    Checkbox,
     Icon,
     Divider,
-    Modal,
-    Dropdown,
-    Tab,
-    Menu,
-    Label
+    Modal
 } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {titleConstruct,isJson,getDate} from '../../supports/services'

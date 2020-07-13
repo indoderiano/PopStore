@@ -36,10 +36,12 @@ class PaymentList extends Component {
         clock:undefined,
         uploadid:0,
         filepaymentproof:undefined,
+        previewimage:[],
         errormessage:'',
         iddelete:0,
         isuploaded:false,
         timeout:'',
+        loading:false,
 
      }
 
@@ -56,12 +58,15 @@ class PaymentList extends Component {
         clearTimeout(this.state.timeout)
     }
 
-    // IMAGE IS CONVERTED TO BASE64
-    onUpload=async ()=>{
+    
+    onUpload=()=>{
         console.log(this.state.filepaymentproof)
         if(!this.state.filepaymentproof){
             this.setState({errormessage:'Please select an image file'})
         }else{
+
+            this.setState({loading:true})
+
             var formdata= new FormData()
 
             var Headers={
@@ -80,12 +85,12 @@ class PaymentList extends Component {
             .then((uploaded)=>{
 
                 console.log('payment proof uploaded')
-                // this.props.LoadPayment(this.props.User.iduser)
+                this.props.LoadPayment(this.props.User.iduser)
 
-                // var delay = setTimeout(()=>{
-                //     this.setState({isuploaded:false})
-                // },4000)
-                // this.setState({isuploaded:true,timeout:delay})
+                var delay = setTimeout(()=>{
+                    this.setState({isuploaded:false})
+                },4000)
+                this.setState({isuploaded:true,timeout:delay,loading:false})
 
             }).catch((err)=>{
                 console.log(err)
@@ -376,49 +381,110 @@ class PaymentList extends Component {
                                     </div>
                                 }
                             </Grid.Column>
-                            {
-                                transaction.idtransaction==this.state.uploadid?
-                                <Grid.Column width={16} style={{marginTop:'1em',textAlign:'center'}}>
-                                    <Input 
-                                        type='file'
-                                        // multiple
-                                        style={{marginRight:'1em'}}
-                                        onChange={(e)=>{
-                                            if(e.target.files){
-                                                // console.log(e.target.files)
-                                                this.setState({filepaymentproof:e.target.files[0]})
+
+                            <Grid.Column width={16} style={{marginTop:'1em',textAlign:'center'}}>
+                                <Segment
+                                    placeholder
+                                    style={{
+                                        minHeight:'unset'
+                                    }}
+                                    onDragEnter={(e)=>{
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                    }}
+                                    onDragOver={(e)=>{
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                    }}
+                                    onDrop={(e)=>{
+                                        e.stopPropagation()
+                                        e.preventDefault()
+                                        var files=e.dataTransfer.files
+                                        if(files){
+                                            this.setState({filepaymentproof:files[0],uploadid:transaction.idtransaction})
+                                            var reader=new FileReader()
+                                            reader.onload=(e)=>{
+                                                this.setState({previewimage:e.target.result})
                                             }
+                                            reader.readAsDataURL(files[0])
+                                        }
+                                    }}
+                                >
+                                    <Container
+                                        style={{
+                                            border:'3px solid rgba(0,0,0,.6)',
+                                            borderStyle:'dashed',
+                                            padding:'1em 0',
+                                            flex:1,
+                                            display:'flex',
+                                            flexDirection:'column',
+                                            justifyContent:'center',
+                                            alignItems:'center',
+                                            color:'rgba(0,0,0,.6)'
                                         }}
-                                    />
-                                    <Button primary style={{height:'100%'}} onClick={this.onUpload}><Icon name='upload'/>Upload</Button>
-                                    {
-                                        this.state.errormessage?
-                                        <Label 
-                                            basic 
-                                            color='red' 
-                                            pointing 
-                                            style={{
-                                                position:'absolute',
-                                                top:'100%',
-                                                left:'35%'
-                                            }}>
-                                            {this.state.errormessage}
-                                        </Label>
-                                        : null
-                                    }
-                                </Grid.Column>
-                                :
-                                <Grid.Column width={16} style={{marginTop:'1em',textAlign:'center'}}>
-                                    <Button 
-                                        primary 
-                                        disabled={isexpired}
-                                        style={{width:'100%'}}
-                                        onClick={()=>{this.setState({uploadid:transaction.idtransaction})}}
                                     >
-                                        Upload Transfer Proof
-                                    </Button>
-                                </Grid.Column>
-                            }
+                                        <Icon name='download' size='big'/>
+                                        <div style={{margin:'1em 0',fontSize:'14px',fontWeight:'800'}}>
+                                            Drag And Drop Images Here
+                                        </div>
+                                        <div style={{margin:'0 0 .5em',fontSize:'14px',fontWeight:'800',color:'rgba(0,0,0,.8)'}}>
+                                            Or
+                                        </div>
+                                        <Input 
+                                            type='file'
+                                            // multiple
+                                            style={{marginRight:'1em'}}
+                                            onChange={(e)=>{
+                                                if(e.target.files){
+                                                    // console.log(e.target.files)
+                                                    this.setState({filepaymentproof:e.target.files[0],uploadid:transaction.idtransaction})
+                                                    var reader=new FileReader()
+                                                    reader.onload=(e)=>{
+                                                        this.setState({previewimage:e.target.result})
+                                                    }
+                                                    reader.readAsDataURL(e.target.files[0])
+                                                }
+                                            }}
+                                        />
+                                        {
+                                            this.state.uploadid==transaction.idtransaction&&this.state.previewimage?
+                                            <>
+                                                <div style={{fontSize:'14px',fontWeight:'800',margin:'.5em 0 0'}}>
+                                                    Preview
+                                                </div>
+                                                <Image src={this.state.previewimage} size='small' style={{margin:'1em 0 0'}}/>
+                                            </>
+                                            : null
+                                        }
+                                    </Container>
+                                </Segment>
+                                <Button 
+                                    primary 
+                                    disabled={isexpired||(this.state.loading&&this.state.uploadid==transaction.idtransaction)}
+                                    loading={this.state.loading&&this.state.uploadid==transaction.idtransaction}
+                                    style={{width:'100%'}}
+                                    onClick={this.onUpload}
+                                    // onClick={()=>{this.setState({uploadid:transaction.idtransaction})}}
+                                >
+                                    Upload Transfer Proof
+                                </Button>
+                                {
+                                    this.state.errormessage?
+                                    <Label 
+                                        basic 
+                                        color='red' 
+                                        pointing 
+                                        style={{
+                                            position:'absolute',
+                                            top:'100%',
+                                            left:'35%'
+                                        }}>
+                                        {this.state.errormessage}
+                                    </Label>
+                                    : null
+                                }
+                            </Grid.Column>
+                            
                             <Grid.Column width={16} style={{marginTop:'1em',textAlign:'center'}}>
                                 Total Payment : 
                                 <Header as={'h4'} style={{display:'inline-block'}}>{idr(transaction.totalpayment)}</Header>

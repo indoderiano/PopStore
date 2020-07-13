@@ -20,7 +20,7 @@ import {
 } from 'semantic-ui-react'
 import Payment from './Payment'
 import {Link} from 'react-router-dom'
-import {titleConstruct,isJson} from '../supports/services'
+import {titleConstruct,isJson, idr} from '../supports/services'
 import {LoadCart,UpdateCheckout,CountTotalCharge,CountTotalPayment} from '../redux/actions'
 import {Redirect} from 'react-router-dom'
 import { connect } from 'react-redux'
@@ -212,7 +212,7 @@ class Checkout extends Component {
                                                                 opacity:item.isselected?'1':'.8'
                                                             }}
                                                         >
-                                                            Rp {item.price},00
+                                                            {idr(item.price)}
                                                         </Header>
                                                         <p style={{margin:'0 0 .5em',flexBasis:'1em',fontSize:'13px',opacity:'.7'}}>{item.weight} gram</p>
                                                         <p style={{margin:'0 0 .5em',flexBasis:'1em'}}>qty: {item.qty}</p>
@@ -248,7 +248,7 @@ class Checkout extends Component {
                                             delivery cost
                                         </span>
                                         <span style={{float:'right'}}>
-                                            Rp {seller.seller_delivery_cost},00
+                                            {idr(seller.seller_delivery_cost)}
                                         </span>
                                     </div>
                                     : null
@@ -265,7 +265,7 @@ class Checkout extends Component {
                                     color='blue'
                                     style={{display:'inline-block',width:'150px',fontSize:'15px',marginTop:'0'}}
                                 >
-                                    Rp {seller.seller_delivery_cost?seller.seller_items_price+seller.seller_delivery_cost:seller.seller_items_price},00
+                                    {idr(seller.seller_delivery_cost?seller.seller_items_price+seller.seller_delivery_cost:seller.seller_items_price)}
                                 </Header>
                             </Grid.Column>
                         </Grid.Row>
@@ -330,17 +330,17 @@ class Checkout extends Component {
                                 </div>
                                 <div style={{margin:'0 0 1em'}}>
                                     <Header as={'h5'} style={style.checkoutTitle}>Total Price</Header>
-                                    <Header as={'h5'} style={style.checkoutValue}>Rp {this.props.Cart.totalprice},00</Header>
+                                    <Header as={'h5'} style={style.checkoutValue}>{idr(this.props.Cart.totalprice)}</Header>
                                 </div>
                                 <div style={{margin:'0 0 1em'}}>
                                     <Header as={'h5'} style={style.checkoutTitle}>Total Delivery Cost</Header>
-                                    <Header as={'h5'} style={style.checkoutValue}>{this.props.Cart.totaldeliverycost?`Rp ${this.props.Cart.totaldeliverycost},00`:'-'}</Header>
+                                    <Header as={'h5'} style={style.checkoutValue}>{this.props.Cart.totaldeliverycost?`${idr(this.props.Cart.totaldeliverycost)}`:'-'}</Header>
                                 </div>
                                     
                                 <Divider/>
                                 <div style={{margin:'0 0 1em'}}>
                                     <Header as={'h5'} style={{display:'inline-block',color:'gray',margin:'0',fontWeight:'300'}}>Total</Header>
-                                    <Header as={'h5'} color='blue' style={{display:'inline-block',float:'right',margin:'0'}}>{this.props.Cart.totalworth?`Rp ${this.props.Cart.totalworth},00`:'-'}</Header>
+                                    <Header as={'h5'} color='blue' style={{display:'inline-block',float:'right',margin:'0'}}>{this.props.Cart.totalworth?`${idr(this.props.Cart.totalworth)}`:'-'}</Header>
                                 </div>
                                 <div style={{textAlign:'right'}}>
 
