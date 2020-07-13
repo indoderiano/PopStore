@@ -433,7 +433,7 @@ class Product extends Component {
                         style={{
                             width:'100%',
                             paddingTop:'80%',
-                            backgroundImage:`url(${APIURL+image})`,
+                            backgroundImage:`url(${image})`,
                             backgroundSize:'contain',
                             backgroundRepeat:'no-repeat',
                             backgroundPosition:'center',
@@ -572,7 +572,7 @@ class Product extends Component {
                                     style={{
                                         width:'100%',
                                         paddingTop:'75%',
-                                        backgroundImage:`url(${APIURL+this.state.imageshow})`,
+                                        backgroundImage:`url(${this.state.imageshow})`,
                                         backgroundSize:'contain',
                                         backgroundRepeat:'no-repeat',
                                         backgroundPosition:'center',

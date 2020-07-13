@@ -143,7 +143,7 @@ class MyProducts extends Component {
                             {index+1} 
                         </Grid.Column>
                         <Grid.Column width={4}>
-                            <Image src={APIURL+ JSON.parse(val.imagecover)[0]} style={{height:'100px' }}/>
+                            <Image src={JSON.parse(val.imagecover)[0]} style={{height:'100px' }}/>
                             <Header as={'h4'}>
                                 {val.product_name}
                                 <Header.Subheader>

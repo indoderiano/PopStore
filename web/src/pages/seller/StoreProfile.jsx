@@ -118,7 +118,7 @@ const StoreProfile=(props)=>{
                         <Grid.Column style={{height:'20%'}}>
                           <div>
                                 {
-                                    data.imageprofile?  <Image src={APIURL+data.imageprofile}/> :  <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='large' disabled />
+                                    data.imageprofile?  <Image src={data.imageprofile}/> :  <Image src='https://react.semantic-ui.com/images/wireframe/image.png' size='large' disabled />
                                 }
                                 {
                                     editpicture?<Button onClick={()=>{setpicture(!editpicture)}}>Change Profile Picture</Button>: 

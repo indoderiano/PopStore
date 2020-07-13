@@ -94,7 +94,7 @@ class Orders extends Component {
                             <div
                                 style={{
                                     paddingTop:'80%',
-                                    backgroundImage:`url(${APIURL+isJson(item.imagecover)[0]})`,
+                                    backgroundImage:`url(${isJson(item.imagecover)[0]})`,
                                     backgroundSize:'contain',
                                     backgroundRepeat:'no-repeat',
                                     backgroundPosition:'center',

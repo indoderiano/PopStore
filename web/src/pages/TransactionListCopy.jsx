@@ -49,7 +49,7 @@ class TransactionList extends Component {
                                 <div
                                     style={{
                                         paddingTop:'80%',
-                                        backgroundImage:`url(${APIURL+isJson(item.imagecover)[0]})`,
+                                        backgroundImage:`url(${isJson(item.imagecover)[0]})`,
                                         backgroundSize:'cover',
                                         backgroundPosition:'center',
                                         position:'relative'

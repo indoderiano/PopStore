@@ -145,7 +145,7 @@ class FlashsalesData extends Component {
                             style={{
                                 width:'100%',
                                 paddingTop:'60%',
-                                backgroundImage:`url(${APIURL+isJson(product.imagecover)[0]})`,
+                                backgroundImage:`url(${isJson(product.imagecover)[0]})`,
                                 backgroundSize:'contain',
                                 backgroundRepeat:'no-repeat',
                                 backgroundPosition:'center',

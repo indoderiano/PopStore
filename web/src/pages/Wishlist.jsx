@@ -55,7 +55,7 @@ const WishlistPage = (props) => {
               <div key={index} style={{width:'22%', marginLeft:12, marginRight:12, marginBottom:20}}>
                 <Slide left>
             <Card raised style={{ paddingTop:5, height:'100%'}} >
-            <Image src={APIURL+isJson(val.imagecover)[0]} style={{height:'40%'}} wrapped ui={false} />
+            <Image src={isJson(val.imagecover)[0]} style={{height:'40%'}} wrapped ui={false} />
             <Card.Content style={{backgroundColor:'#FAF8ED'}}>
               <Card.Header style={{ fontFamily:'muli,sans-serif', fontWeight: 400}}>{val.product_name}</Card.Header>
               <Card.Meta>{val.category}</Card.Meta>

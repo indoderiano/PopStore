@@ -89,7 +89,7 @@ class WomenProducts extends Component {
                         <Link to={`/product/${val.idproduct}`}>
                             <Card raised style={{ paddingTop:5, height:'100%'}}>
                                 <a style={{alignSelf:'center'}}>
-                                    <Image src={APIURL+ JSON.parse(val.imagecover)[0]} style={{height:'150px' }}/>
+                                    <Image src={JSON.parse(val.imagecover)[0]} style={{height:'150px' }}/>
                                 </a>
                                 <Card.Content style={{borderColor: 'transparent',}} >
                                 <Card.Header style={{display:'block', overflow: 'hidden',}}>{val.product_name}</Card.Header>
