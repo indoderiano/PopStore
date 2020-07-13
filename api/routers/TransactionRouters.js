@@ -19,7 +19,7 @@ Router.put('/:idtransaction',TransactionControllers.update)
 Router.get('/seller',TransactionControllers.sellerGetStatus)
 Router.get('/admin',TransactionControllers.adminGetStatus)
 
-Router.post('/paymentproof/cloudinary/:idtransaction',upload.single('image'),TransactionControllers.cloudinaryUpload)
+Router.post('/paymentproof/cloudinary/:idtransaction',upload.single('image'),TransactionControllers.uploadPaymentProofToCloudinary)
 
 
 module.exports=Router
