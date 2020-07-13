@@ -32,7 +32,7 @@ const {
     FlashsaleRouters,
     CommentRouters,
 }=require('./api/routers')
-const { db } = require('./connections/mysql')
+const { db } = require('./api/connections/mysql')
 
 app.use('/users',UserRouters)
 app.use('/products',ProductRouters)
