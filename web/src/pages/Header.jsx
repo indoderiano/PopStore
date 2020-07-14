@@ -53,8 +53,8 @@ class MainHeader extends Component {
               size={this.props.size}
               style={{backgroundColor:'rgb(27, 28, 29)',margin:'0',padding:'14px 0 0px'}}
             >
-              {/* <Responsive as={Container} minWidth={768} style={{display:'block',height:'54px'}}> */}
-              <Container style={{display:'block',height:'54px'}}>
+              <Responsive as={Container} minWidth={768} style={{display:'block',height:'54px'}}>
+              {/* <Container style={{display:'block',height:'54px'}}> */}
                 <Menu.Item as={Link} to='/' style={style.menu} active>
                   POPSTORE
                 </Menu.Item>
@@ -272,16 +272,16 @@ class MainHeader extends Component {
                   : null
                 }
 
-              {/* </Responsive> */}
-              </Container>
+              </Responsive>
+              {/* </Container> */}
 
               {/* MOBILE VERSION */}
-              {/* <Responsive as={Container} maxWidth={767} style={{display:'block',height:'54px',padding:'0 1em'}}>
+              <Responsive as={Container} maxWidth={767} style={{display:'block',height:'54px',padding:'0 1em'}}>
                 <Menu.Item as={Link} to='/' style={style.menu} active>
                   POPSTORE
                 </Menu.Item>
                 <MenuModal/>
-              </Responsive> */}
+              </Responsive>
             </Menu>
          );
     }
@@ -297,12 +297,6 @@ const style={
     display:'inline-block',
     marginTop:'5px',
     padding:'.6em 1em',
-    float:'right',
-    height:'100%'
-  },
-  menuClick:{
-    display:'inline-block',
-    marginTop:'5px',
     float:'right',
     height:'100%'
   }
