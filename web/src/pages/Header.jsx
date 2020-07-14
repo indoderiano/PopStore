@@ -53,7 +53,7 @@ class MainHeader extends Component {
               size={this.props.size}
               style={{backgroundColor:'rgb(27, 28, 29)',margin:'0',padding:'14px 0 0px'}}
             >
-              <Responsive as={Container} minWidth={768} style={{display:'block',height:'54px'}}>
+              <Responsive as={Container} minWidth={68} style={{display:'block',height:'54px'}}>
               {/* <Container style={{display:'block',height:'54px'}}> */}
                 <Menu.Item as={Link} to='/' style={style.menu} active>
                   POPSTORE
@@ -276,7 +276,7 @@ class MainHeader extends Component {
               {/* </Container> */}
 
               {/* MOBILE VERSION */}
-              <Responsive as={Container} maxWidth={767} style={{display:'block',height:'54px',padding:'0 1em'}}>
+              <Responsive as={Container} maxWidth={67} style={{display:'block',height:'54px',padding:'0 1em'}}>
                 <Menu.Item as={Link} to='/' style={style.menu} active>
                   POPSTORE
                 </Menu.Item>
