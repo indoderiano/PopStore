@@ -7,8 +7,10 @@ import {
     Icon,
     Label,
     Dropdown,
-    Input
+    Input,
+    Responsive
   } from 'semantic-ui-react'
+import MenuModal from './mobile/HeaderMenu'
 import { connect } from "react-redux";
 import {Link} from 'react-router-dom'
 import {isLogout,LoginUser} from './../redux/actions'
@@ -51,7 +53,8 @@ class MainHeader extends Component {
               size={this.props.size}
               style={{backgroundColor:'rgb(27, 28, 29)',margin:'0',padding:'14px 0 0px'}}
             >
-              <Container style={{display:'block',height:'54px'}}>
+              <Responsive as={Container} minWidth={768} style={{display:'block',height:'54px'}}>
+              {/* <Container style={{display:'block',height:'54px'}}> */}
                 <Menu.Item as={Link} to='/' style={style.menu} active>
                   POPSTORE
                 </Menu.Item>
@@ -78,6 +81,7 @@ class MainHeader extends Component {
                   : null
                 }
                 
+
 
                 <Menu.Item style={{float:'right',padding:'0',height:'100%'}}>
                   
@@ -268,8 +272,16 @@ class MainHeader extends Component {
                   : null
                 }
 
-                
-              </Container>
+              </Responsive>
+              {/* </Container> */}
+
+              {/* MOBILE VERSION */}
+              <Responsive as={Container} maxWidth={767} style={{display:'block',height:'54px',padding:'0 1em'}}>
+                <Menu.Item as={Link} to='/' style={style.menu} active>
+                  POPSTORE
+                </Menu.Item>
+                <MenuModal/>
+              </Responsive>
             </Menu>
          );
     }
@@ -285,6 +297,12 @@ const style={
     display:'inline-block',
     marginTop:'5px',
     padding:'.6em 1em',
+    float:'right',
+    height:'100%'
+  },
+  menuClick:{
+    display:'inline-block',
+    marginTop:'5px',
     float:'right',
     height:'100%'
   }
