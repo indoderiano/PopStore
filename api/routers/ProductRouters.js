@@ -7,7 +7,7 @@ const Router=express.Router()
 
 // Router.get('/productseller',ProductControllers.productseller)               //get all products for seller page
 Router.post('/',ProductControllers.add) // UPLOAD IMAGE TO API
-Router.post('/cloudinary',upload.array('photo'),ProductControllers.create) // UPLOAD IMAGE TO CLOUDINARY
+Router.post('/cloudinary/:store',upload.array('photo'),ProductControllers.create) // UPLOAD IMAGE TO CLOUDINARY
 
 Router.get('/get/:idproduct',ProductControllers.get)
 

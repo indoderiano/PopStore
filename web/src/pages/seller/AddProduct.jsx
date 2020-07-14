@@ -155,7 +155,7 @@ class AddProduct extends Component {
                 description: this.state.description,
                 variant: JSON.stringify(variant),
                 idseller: this.props.Seller.idseller,
-                store: this.props.Seller.namatoko,
+                // store: this.props.Seller.namatoko,
                 idcategory: this.state.idcategory,
                 category: this.state.category,
                 idmerk: this.state.idmerk
@@ -176,7 +176,7 @@ class AddProduct extends Component {
                 }
             }
 
-            Axios.post(`${APIURL}/products/cloudinary`,formdata,config)
+            Axios.post(`${APIURL}/products/cloudinary/${this.props.Seller.namatoko}`,formdata,config)
             .then((newproduct)=>{
                 console.log('upload product berhasil')
 

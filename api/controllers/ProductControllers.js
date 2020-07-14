@@ -48,6 +48,8 @@ module.exports={
         const data = JSON.parse(req.body.data)
         console.log(data)
 
+        const {store}=req.params
+
         // UPLOAD IMAGES TO CLOUDINARY
         var imageurls=[]
         var imageids=[]
@@ -58,7 +60,7 @@ module.exports={
             try{
                 var image = await cloudinary.uploader.upload(`data:image/png;base64,${encoded}`,
                 {
-                    folder: `popstore/store/${data.store}/`,
+                    folder: `popstore/store/${store}/`,
                     use_filename: true,
                 })
 
@@ -89,11 +91,24 @@ module.exports={
         console.log('data')
         console.log(data)
 
+        var product={
+
+        }
+
         console.log('save to mysql')
         var sql=`insert into products set ?`
-        db.query(sql,data,(err,added)=>{
+        db.query(sql,data,async (err,added)=>{
             if(err){
-                // DONT FORGET TO DELETE IMAGE ON CLOUDINARY
+                // DELETE IMAGE ON CLOUDINARY
+                for(var public_id of imageids){
+                    try{
+                        var result = await cloudinary.uploader.destroy(public_id)
+                        console.log(result, 'image deleted')
+                    }catch(err){
+                        console.log(err)
+                    }
+                }
+
                 return res.status(500).json({message:'Cannot upload to mysql, please check again',error:err.message})
             }
 
