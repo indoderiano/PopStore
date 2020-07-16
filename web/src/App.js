@@ -105,7 +105,6 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
           inverted
           pointing
           secondary
-          size='large'
         />
         <div style={{
           position:'absolute',

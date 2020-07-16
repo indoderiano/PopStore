@@ -61,7 +61,7 @@ class Home extends Component {
   }
 
   renderRecommended=()=>{
-    console.log(this.state.recommendedProducts)
+    // console.log(this.state.recommendedProducts)
     if(this.state.recommendedProducts.length){
       return this.state.recommendedProducts.map((val,index)=>{
             return (                  
