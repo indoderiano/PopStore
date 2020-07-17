@@ -16,6 +16,7 @@
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -28,7 +29,18 @@
     <!-- FONT FAMILY MULI Extra-light 200 Extra-light 200 italic  Light 300 italic Regular 400 italic -->
     <link href="https://fonts.googleapis.com/css2?family=Muli:wght@100;200;300;400&display=swap" rel="stylesheet">
     <!-- fontFamily:'muli,sans-serif' -->
-    <title>React App</title>
+
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134588099-2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-134588099-2');
+    </script>
+
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

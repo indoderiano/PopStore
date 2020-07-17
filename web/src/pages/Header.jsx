@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import {
     Button,
-    Container,
-    Header,
     Menu,
-    Icon,
-    Label,
     Dropdown,
     Input,
     Responsive,
     SegmentGroup,
-    Segment
+    Dimmer,
+    Loader
   } from 'semantic-ui-react'
 import MenuModal from '../component/mobile/HeaderMenu'
 import HeaderItems from '../component/HeaderItems'
@@ -61,8 +58,7 @@ class MainHeader extends Component {
                 backgroundColor:'rgb(27, 28, 29)',
                 margin:'0',
                 padding:'7px 2em 14px',
-                width:'100%',
-                overflow:'hidden'
+                width:'100%'
               }}
               // vertical
             >
@@ -133,7 +129,15 @@ class MainHeader extends Component {
                             inverted={!this.props.fixed}
                             onClick={()=>{this.setState({isloginclick:true})}}
                         >
-                            Log in
+                          Log in
+                          {
+                            this.props.User.loading?
+                            <Dimmer active>
+                              <Loader size='small'/>
+                            </Dimmer>
+                            // <Loader active/>
+                            : null
+                          }
                         </Button>
                         }
                         <Button as={Link} to='/register' inverted={!this.props.fixed} primary={this.props.fixed} style={{ marginLeft: '0.5em' }}>
