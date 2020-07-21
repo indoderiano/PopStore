@@ -510,22 +510,23 @@ module.exports={
     },
                     ///////////////// GET MOST VIEWED PRODUCT FOR HOMEPAGE /////////////////
     mostviewed:(req,res)=>{
-        var sql= `  SELECT p.* ,i.iditem, i.price, c.category_name as maincategory
-                        FROM products p 
-                        JOIN items i ON i.idproduct=p.idproduct
-                        JOIN categories c ON p.idcategory=c.idcategory
-                        WHERE p.isdeleted=0 AND p.isblocked=0
-                    GROUP BY i.idproduct  
+        console.log('get mostviewed products')
+        var sql= `  SELECT p.*, MAX(i.price), c.category_name as maincategory
+                    FROM products p 
+                    JOIN items i ON i.idproduct=p.idproduct
+                    JOIN categories c ON p.idcategory=c.idcategory
+                    WHERE p.isdeleted=0 AND p.isblocked=0
+                    GROUP BY idproduct, p.product_name, p.imagecover, p.cover_public_id, p.description, p.variant, p.isdeleted, p.createat, p.updateat, p.category, p.isblocked, p.sold, p.product_rating, p.product_rating_count, p.idcategory, p.idmerk, p.seen, p.isflashsale, maincategory
                     ORDER BY seen DESC
                     LIMIT 0,4;`
         db.query(sql,(err,mostviewed)=>{
             if(err) return res.status(500).send({err,message:'error get product search'})
-            sql= `  SELECT p.* ,i.iditem, i.price, c.category_name as maincategory
-                        FROM products p 
-                        JOIN items i ON i.idproduct=p.idproduct
-                        JOIN categories c ON p.idcategory=c.idcategory
-                        WHERE p.isdeleted=0 AND p.isblocked=0
-                    GROUP BY i.idproduct  
+            sql= `  SELECT p.*, MAX(i.price), c.category_name as maincategory
+                    FROM products p 
+                    JOIN items i ON i.idproduct=p.idproduct
+                    JOIN categories c ON p.idcategory=c.idcategory
+                    WHERE p.isdeleted=0 AND p.isblocked=0
+                    GROUP BY idproduct, p.product_name, p.imagecover, p.cover_public_id, p.description, p.variant, p.isdeleted, p.createat, p.updateat, p.category, p.isblocked, p.sold, p.product_rating, p.product_rating_count, p.idcategory, p.idmerk, p.seen, p.isflashsale, maincategory
                     ORDER BY sold DESC
                     LIMIT 0,4;`
             db.query(sql,(err,recommended)=>{

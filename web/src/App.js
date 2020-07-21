@@ -3,9 +3,9 @@ import './App.css';
 import Home from './pages/Home'
 import { Switch, Route, Redirect } from 'react-router-dom';
 import {
-  Grid,
   Header,
-  Segment,
+  Popup,
+  Button
 } from 'semantic-ui-react'
 import MainHeader from './pages/Header'
 import Login from './pages/Login';
@@ -143,6 +143,25 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
         secondary
         size='large'
       />
+
+      <Popup
+        content='I will not flip!'
+        on='click'
+        pinned
+        position='left center'
+        trigger={
+          <Button 
+            content='Button'
+            style={{
+              position:'absolute',
+              top:'70px',
+              right:'20px',
+              zIndex:'99'
+            }}
+          />
+        }
+      />
+
       <Switch>
 
         {/* JAMES */}
