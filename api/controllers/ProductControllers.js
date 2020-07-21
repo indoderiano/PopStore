@@ -508,25 +508,27 @@ module.exports={
             })
         })
     },
-                    ///////////////// GET MOST VIEWED PRODUCT FOR HOMEPAGE /////////////////
+    ///////////////// GET MOST VIEWED PRODUCT FOR HOMEPAGE /////////////////
+    // REF, HOW TO USE GROUP BY, MODE "only_full_group_by"
+    // https://gabi.dev/2016/03/03/group-by-are-you-sure-you-know-it/#:~:text=MySQL%20extends%20the%20standard%20SQL,unnecessary%20column%20sorting%20and%20grouping.
     mostviewed:(req,res)=>{
         console.log('get mostviewed products')
-        var sql= `  SELECT p.*, MAX(i.price), c.category_name as maincategory
+        var sql= `  SELECT p.*, MAX(i.price) as price, c.category_name as maincategory
                     FROM products p 
                     JOIN items i ON i.idproduct=p.idproduct
                     JOIN categories c ON p.idcategory=c.idcategory
                     WHERE p.isdeleted=0 AND p.isblocked=0
-                    GROUP BY idproduct, p.product_name, p.imagecover, p.cover_public_id, p.description, p.variant, p.isdeleted, p.createat, p.updateat, p.category, p.isblocked, p.sold, p.product_rating, p.product_rating_count, p.idcategory, p.idmerk, p.seen, p.isflashsale, maincategory
+                    GROUP BY idproduct
                     ORDER BY seen DESC
                     LIMIT 0,4;`
         db.query(sql,(err,mostviewed)=>{
             if(err) return res.status(500).send({err,message:'error get product search'})
-            sql= `  SELECT p.*, MAX(i.price), c.category_name as maincategory
+            sql= `  SELECT p.*, MAX(i.price) as price, c.category_name as maincategory
                     FROM products p 
                     JOIN items i ON i.idproduct=p.idproduct
                     JOIN categories c ON p.idcategory=c.idcategory
                     WHERE p.isdeleted=0 AND p.isblocked=0
-                    GROUP BY idproduct, p.product_name, p.imagecover, p.cover_public_id, p.description, p.variant, p.isdeleted, p.createat, p.updateat, p.category, p.isblocked, p.sold, p.product_rating, p.product_rating_count, p.idcategory, p.idmerk, p.seen, p.isflashsale, maincategory
+                    GROUP BY idproduct                 
                     ORDER BY sold DESC
                     LIMIT 0,4;`
             db.query(sql,(err,recommended)=>{
