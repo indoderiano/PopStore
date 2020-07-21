@@ -42,7 +42,12 @@ class HeaderItems extends Component {
                 {/* SALES */}
                 {
                     this.props.User.isadmin?
-                    <Menu.Item as={Link} to='/admin/sales' style={style.menu}>Sales</Menu.Item>
+                    <Menu.Item as={Link} to='/admin/sales' style={style.menu}><Icon name='chart line'/>Sales</Menu.Item>
+                    : null
+                }
+                {
+                    this.props.User.isseller?
+                    <Menu.Item as={Link} to='/seller' style={style.menu}>{titleConstruct(this.props.Seller.namatoko)}</Menu.Item>
                     : null
                 }
                 {

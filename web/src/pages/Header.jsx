@@ -7,8 +7,12 @@ import {
     Responsive,
     SegmentGroup,
     Dimmer,
-    Loader
+    Loader,
+    Popup,
+    Label,
+    Icon
   } from 'semantic-ui-react'
+import UserInfo from './UserInfo'
 import MenuModal from '../component/mobile/HeaderMenu'
 import HeaderItems from '../component/HeaderItems'
 import { connect } from "react-redux";
@@ -103,7 +107,23 @@ class MainHeader extends Component {
                     {
                     !this.props.User.islogin?
                     <>
-                        {
+                      <Popup
+                        content={<UserInfo/>}
+                        on='click'
+                        pinned
+                        // flowing
+                        position='bottom center'
+                        style={{maxWidth:'350px'}}
+                        trigger={
+                          <Button
+                            inverted
+                            style={{marginRight:'2em',fontWeight:'200'}}
+                          >
+                            <Icon name='users'/> User info
+                          </Button>
+                        }
+                      />
+                      {
                         this.state.isloginclick?
                         <div style={{display:'inline-block'}}>
                             <Input
@@ -155,7 +175,7 @@ class MainHeader extends Component {
             </Responsive>
 
 
-
+            {/* MOBILE RESPONSIVE */}
             <Responsive
               as={Menu}
               maxWidth={767}
@@ -187,7 +207,25 @@ class MainHeader extends Component {
                   {
                   !this.props.User.islogin?
                   <>
-                      {
+                    <Popup
+                      content={<UserInfo/>}
+                      on='click'
+                      pinned
+                      flowing
+                      position='left center'
+                      trigger={
+                        <Button 
+                          content='Button'
+                          // style={{
+                          //   position:'absolute',
+                          //   top:'70px',
+                          //   right:'20px',
+                          //   zIndex:'99'
+                          // }}
+                        />
+                      }
+                    />
+                    {
                       this.state.isloginclick?
                       <div style={{display:'inline-block'}}>
                           <Input

@@ -5,9 +5,11 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import {
   Header,
   Popup,
-  Button
+  Button,
+  Label
 } from 'semantic-ui-react'
 import MainHeader from './pages/Header'
+import About from './pages/About'
 import Login from './pages/Login';
 import Register from './pages/Register'
 import Verification from './pages/Verification'
@@ -27,7 +29,7 @@ import VerifyTable from './pages/Adminverify'
 import Profile from './pages/Profile'
 import Sellerregis from './pages/Sellerregis'
 import Admintable from './pages/Admin'
-import Testimage from './pages/aaaaa'
+import Testimage from './pages/UserInfo'
 import WishlistPage from './pages/Wishlist'
 import CommentSection from './component/Comment'
 import Sales from './pages/admin/SalesCharts'
@@ -145,20 +147,33 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
       />
 
       <Popup
-        content='I will not flip!'
+        content={<About/>}
+        basic
+        // header='About'
         on='click'
-        pinned
+        pinned={true}
+        // flowing
         position='left center'
+        style={{
+          position:'absolute',
+          top:'65px',
+          right:'100px',
+          // backgroundColor:'rgba(230,230,230,1)'
+        }}
         trigger={
-          <Button 
-            content='Button'
+          <Label 
+            as='a' 
+            color='orange' 
+            tag
             style={{
               position:'absolute',
               top:'70px',
               right:'20px',
-              zIndex:'99'
+              // zIndex:'99'
             }}
-          />
+          >
+            About this app
+          </Label>
         }
       />
 

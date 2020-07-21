@@ -509,7 +509,7 @@ module.exports={
         })
     },
     ///////////////// GET MOST VIEWED PRODUCT FOR HOMEPAGE /////////////////
-    // REF, HOW TO USE GROUP BY, MODE "only_full_group_by"
+    // REF, HOW TO USE GROUP BY, WITH MODE "only_full_group_by"
     // https://gabi.dev/2016/03/03/group-by-are-you-sure-you-know-it/#:~:text=MySQL%20extends%20the%20standard%20SQL,unnecessary%20column%20sorting%20and%20grouping.
     mostviewed:(req,res)=>{
         console.log('get mostviewed products')
