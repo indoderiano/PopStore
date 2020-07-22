@@ -62,12 +62,15 @@ class FlashsaleRequest extends Component {
     getFlashsaleList=()=>{
         Axios.get(`${APIURL}/flashsales/status?idflashsalestatus=2`)
         .then((flashsale)=>{
-            console.log('flashsale list',flashsale.data)
-
-            this.setState({flashsale:flashsale.data[0]})
             
-            // INITIAL IDFLASHSALE
-            this.getProductList(flashsale.data[0].idflashsale)
+            if(flashsale.data.length){
+                console.log('flashsale list',flashsale.data)
+                this.setState({flashsale:flashsale.data[0]})
+                
+                // INITIAL IDFLASHSALE
+                this.getProductList(flashsale.data[0].idflashsale)
+            }
+
         }).catch((err)=>{
             console.log(err)
         })

@@ -1,76 +1,161 @@
 import React, { Component } from 'react';
-import { Grid, Image, Button, Segment, Header, Card, Icon, Rating } from 'semantic-ui-react';
+import { Grid, Image, Button, Segment, Header, Card, Icon, Rating, Responsive } from 'semantic-ui-react';
 import Flashsale from '../component/FlashsaleHome'
 import { NavLink, Link } from 'react-router-dom';
 import MenPic from '../assets/images/Men.jpg'
 import Axios from 'axios';
 import { APIURL } from '../supports/ApiUrl';
+import { isJson } from '../supports/services';
 
 class Home extends Component {
   state = {
       mostViewedProducts:[],
-      recommendedProducts:[]
+      recommendedProducts:[],
+      screenWidth:''
   }
 
   componentDidMount(){
-      Axios.get(`${APIURL}/products/mostviewed`)
-      .then((res)=>{
-        console.log(res)
-        this.setState({
-          mostViewedProducts:res.data.mostviewed,
-          recommendedProducts:res.data.recommended
-        })
-      }).catch((err)=>{
-        console.log(err)
+    this.checkWidth()
+    Axios.get(`${APIURL}/products/mostviewed`)
+    .then((res)=>{
+      console.log(res)
+      this.setState({
+        mostViewedProducts:res.data.mostviewed,
+        recommendedProducts:res.data.recommended
       })
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  getWidth = () => {
+    const isSSR = typeof window === 'undefined'
+
+    // console.log(typeof window)
+    // console.log(isSSR)
+    // console.log(Responsive.onlyTablet.minWidth)
+    
+    return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth
+  }
+
+  checkWidth=()=>{
+    console.log('check width')
+
+    var width=this.getWidth()
+    console.log('width',width)
+
+    this.setState({screenWidth:width})
   }
 
   renderMostViewed=()=>{
     // console.log(this.state.mostViewedProducts)
     // console.log(this.state.mostViewedProducts[0])
     // console.log( this.state.mostViewedProducts[0])
+
+    // RESPONSIVE
+    // CALCULATE WIDTH
+    var columnNumber
+    if(this.state.screenWidth<400){
+      columnNumber=1
+    }else if(this.state.screenWidth<600){
+      columnNumber=2
+    }else if(this.state.screenWidth<800){
+      columnNumber=3
+    }else if(this.state.screenWidth<1000){
+      columnNumber=4
+    }else if(this.state.screenWidth<1250){
+      columnNumber=5
+    }else if(this.state.screenWidth>=1250){
+      columnNumber=6
+    }
+
     if(this.state.mostViewedProducts.length){
       return this.state.mostViewedProducts.map((val,index)=>{
-          return (                  
-            <div key={index} style={{width:'22%', marginLeft:12, marginRight:12, marginBottom:20}}>
-                <Link to={`/product/${val.idproduct}`}>
-                    <Card raised style={{ paddingTop:5, height:'100%'}}>
-                            <Image src={val.imagecover?JSON.parse(val.imagecover)[0]:''} style={{height:'150px' }}/>
-                        {/* <a style={{alignSelf:'center'}}>
-                        </a> */}
-                        <Card.Content style={{borderColor: 'transparent',}} >
-                        <Card.Header style={{display:'block', overflow: 'hidden',}}>{val.product_name}</Card.Header>
-                        <Card.Meta>{val.maincategory}</Card.Meta>
-                        <Card.Description >
-                            Rp.{val.price} <br/>
-                            <Rating icon='star' rating={val.product_rating} maxRating={5} />
-                        </Card.Description>
-                        </Card.Content>
-                        <Card.Content style={{textAlign:'center',alignSelf:'center'}} extra>
-                            <Icon name='cart' />
-                            Detail
-                        {/* <a style={{fontSize:'20px', width:'100%'}} >
-                        </a> */}
-                        </Card.Content>
-                    </Card>
-                </Link>
-            </div>
+          return (         
+            <Grid.Column 
+              key={index}
+              style={{
+                flexBasis:`${100/columnNumber}%`,
+                padding:'.5em'
+              }}
+              // width={3}
+            >
+              <Link to={`/product/${val.idproduct}`}>
+                  <Card raised style={{ paddingTop:5, height:'100%'}}>
+                      {/* <Image src={val.imagecover?JSON.parse(val.imagecover)[0]:''} style={{height:'150px' }}/> */}
+                      <div
+                        style={{
+                          paddingTop:'80%',
+                          backgroundImage: val.imagecover?`url(${isJson(val.imagecover)[0]})`:'',
+                          backgroundPosition:'center',
+                          backgroundSize:'contain',
+                          backgroundRepeat:'no-repeat'
+                        }}
+                      />
+                      <Card.Content style={{borderColor: 'transparent',}} >
+                      <Card.Header style={{display:'block', overflow: 'hidden',}}>{val.product_name}</Card.Header>
+                      <Card.Meta>{val.maincategory}</Card.Meta>
+                      <Card.Description >
+                          Rp.{val.price} <br/>
+                          <Rating icon='star' rating={val.product_rating} maxRating={5} />
+                      </Card.Description>
+                      </Card.Content>
+                      <Card.Content style={{textAlign:'center',alignSelf:'center'}} extra>
+                          <Icon name='cart' />
+                          Detail
+                      {/* <a style={{fontSize:'20px', width:'100%'}} >
+                      </a> */}
+                      </Card.Content>
+                  </Card>
+              </Link>
+            </Grid.Column>
           ) 
       })
     }
   }
 
   renderRecommended=()=>{
+    // RESPONSIVE
+    // CALCULATE WIDTH
+    var columnNumber
+    if(this.state.screenWidth<400){
+      columnNumber=1
+    }else if(this.state.screenWidth<600){
+      columnNumber=2
+    }else if(this.state.screenWidth<800){
+      columnNumber=3
+    }else if(this.state.screenWidth<1000){
+      columnNumber=4
+    }else if(this.state.screenWidth<1250){
+      columnNumber=5
+    }else if(this.state.screenWidth>=1250){
+      columnNumber=6
+    }
     // console.log(this.state.recommendedProducts)
     if(this.state.recommendedProducts.length){
       return this.state.recommendedProducts.map((val,index)=>{
-            return (                  
-              <div key={index} style={{width:'22%', marginLeft:12, marginRight:12, marginBottom:20}}>
+            return (      
+              <Grid.Column 
+                key={index}
+                style={{
+                  flexBasis:`${100/columnNumber}%`,
+                  padding:'.5em'
+                }}
+                // width={3}
+              >
+              {/* // <div key={index} style={{display:'inline-block',minWidth:'200px',maxWidth:'250px', width:'20%', padding:'0 12px', marginBottom:20}}> */}
                   <Link to={`/product/${val.idproduct}`}>
                       <Card raised style={{ paddingTop:5, height:'100%'}}>
-                              <Image src={val.imagecover?JSON.parse(val.imagecover)[0]:''} style={{height:'150px' }}/>
-                          {/* <a style={{alignSelf:'center'}}>
-                          </a> */}
+                          {/* <Image src={val.imagecover?JSON.parse(val.imagecover)[0]:''} style={{height:'150px' }}/> */}
+                          <div
+                            style={{
+                              paddingTop:'80%',
+                              backgroundImage: val.imagecover?`url(${isJson(val.imagecover)[0]})`:'',
+                              backgroundPosition:'center',
+                              backgroundSize:'contain',
+                              backgroundRepeat:'no-repeat'
+                            }}
+                          />
                           <Card.Content style={{borderColor: 'transparent',}} >
                           <Card.Header style={{display:'block', overflow: 'hidden',}}>{val.product_name}</Card.Header>
                           <Card.Meta>{val.maincategory}</Card.Meta>
@@ -87,7 +172,8 @@ class Home extends Component {
                           </Card.Content>
                       </Card>
                   </Link>
-              </div>
+              {/* </div> */}
+              </Grid.Column> 
            ) 
       })
     }
@@ -96,7 +182,8 @@ class Home extends Component {
 
   render() { 
     return ( 
-          <Grid style={{padding:'20px 50px 50px'}}>
+          <Responsive as={Grid} style={{padding:'20px 50px 50px'}} onUpdate={this.checkWidth}>
+          {/* // <Grid style={{padding:'20px 50px 50px'}}> */}
                   <Grid.Row>
                       <Grid.Column 
                         width={16} 
@@ -120,7 +207,10 @@ class Home extends Component {
                         </Header>
                       </Grid.Column>
 
-                      <Grid.Column width={8} style={{padding:'0',height:'350px',overflow:'hidden'}}>
+                      <Grid.Column 
+                        width={8} 
+                        style={{padding:'0',height:'350px',overflow:'hidden',backgroundColor:'rgb(14, 18, 21)'}}
+                      >
                           <Image 
                             // src='/images/men.jpg'
                             src={MenPic}
@@ -201,27 +291,27 @@ class Home extends Component {
                       </Grid.Column>
 
                   </Grid.Row>
-                  <div style={{width:'100%', borderWidth:'2px', borderColor:'black', padding:20, justifyContent: 'center', alignItems:'center', display: 'flex', flexDirection:'column' ,}}>
-                    <div style={{width:'100%', textAlign:'center', marginBottom:20}}>
+                  <Grid.Row>
+                    <Grid.Column width={16} style={{textAlign:'center'}}>
                       <Link to='search/recommended'><h2>Recommended Products</h2></Link>
-                    </div> 
-                    <div style={{width:'70%', textAlign:'center',display:'flex',justifyContent:'space-between'}}>
-                        {this.renderRecommended()}
-                    </div>
-                  </div>
-                  <div style={{width:'100%', borderWidth:'20px', borderColor:'black', padding:20, justifyContent: 'center', alignItems:'center', display: 'flex', flexDirection:'column' ,}}>
-                    <div style={{width:'100%', textAlign:'center', marginBottom:20}}>
-                    <Link to='search/mostviewed'><h2>Most Viewed Products</h2></Link>
-                    </div>
-                    <div style={{width:'70%', textAlign:'center',display:'flex',justifyContent:'space-between'}}>
-                        {this.renderMostViewed()}
-                    </div>
-                  </div>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    {this.renderRecommended()}
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Grid.Column width={16} style={{textAlign:'center'}}>
+                      <Link to='search/mostviewed'><h2>Most Viewed Products</h2></Link>
+                    </Grid.Column>
+                  </Grid.Row>
+                  <Grid.Row>
+                    {this.renderMostViewed()}
+                  </Grid.Row>
 
                   {/* INDO */}
                   {/* FLASHSALE */}
                   <Flashsale/>
-          </Grid>
+          </Responsive>
     );
   }
 }

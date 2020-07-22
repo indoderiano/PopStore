@@ -118,7 +118,12 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
           overflow:'hidden',
         }}>
           <Header as={'h1'} style={{textAlign:'center',marginTop:'0',fontSize:'39px',letterSpacing:'8px'}}>Popstore</Header>
-          <div><center><h3>Loading...</h3><img width="400px" src="https://static.boredpanda.com/blog/wp-content/uploads/2016/07/totoro-exercising-100-days-of-gifs-cl-terryart-2-578f80ec7f328__605.gif"/></center></div>
+          <div>
+            <center>
+              <h3>Loading...</h3>
+              {/* <img width="400px" src="https://static.boredpanda.com/blog/wp-content/uploads/2016/07/totoro-exercising-100-days-of-gifs-cl-terryart-2-578f80ec7f328__605.gif"/> */}
+            </center>
+          </div>
           {/* <Segment 
             basic 
             loading={true} 

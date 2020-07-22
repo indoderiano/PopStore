@@ -520,7 +520,7 @@ module.exports={
                     WHERE p.isdeleted=0 AND p.isblocked=0
                     GROUP BY idproduct
                     ORDER BY seen DESC
-                    LIMIT 0,4;`
+                    LIMIT 0,8;`
         db.query(sql,(err,mostviewed)=>{
             if(err) return res.status(500).send({err,message:'error get product search'})
             sql= `  SELECT p.*, MAX(i.price) as price, c.category_name as maincategory
@@ -530,7 +530,7 @@ module.exports={
                     WHERE p.isdeleted=0 AND p.isblocked=0
                     GROUP BY idproduct                 
                     ORDER BY sold DESC
-                    LIMIT 0,4;`
+                    LIMIT 0,8;`
             db.query(sql,(err,recommended)=>{
             if(err) res.status(500).send({err,message:'error get product search'})
             return res.status(200).send({mostviewed, recommended})
