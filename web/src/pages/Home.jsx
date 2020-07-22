@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Grid, Image, Button, Segment, Header, Card, Icon, Rating, Responsive } from 'semantic-ui-react';
+import About from './About'
 import Flashsale from '../component/FlashsaleHome'
 import { NavLink, Link } from 'react-router-dom';
 import MenPic from '../assets/images/Men.jpg'
@@ -11,7 +12,7 @@ class Home extends Component {
   state = {
       mostViewedProducts:[],
       recommendedProducts:[],
-      screenWidth:''
+      screenWidth:'',
   }
 
   componentDidMount(){
@@ -182,136 +183,138 @@ class Home extends Component {
 
   render() { 
     return ( 
+      <div>
+        <About/>
           <Responsive as={Grid} style={{padding:'20px 50px 50px'}} onUpdate={this.checkWidth}>
-          {/* // <Grid style={{padding:'20px 50px 50px'}}> */}
-                  <Grid.Row>
-                      <Grid.Column 
-                        width={16} 
-                        style={{
-                          textAlign:'center',
-                          padding:'1em'
-                        }}
-                      >
-                        <Header 
-                          as={'h1'} 
-                          className='title-reveal'
-                          style={{
-                            fontFamily:'muli,sans-serif',
-                            fontWeight:'100',
-                            fontSize:45,
-                            letterSpacing:10,
-                            color:'rgba(0,0,0,.8)'
-                          }}
-                        >
-                          POPSTORE
-                        </Header>
-                      </Grid.Column>
+            <Grid.Row>
+              <Grid.Column 
+                width={16} 
+                style={{
+                  textAlign:'center',
+                  padding:'1em'
+                }}
+              >
+                <Header 
+                  as={'h1'} 
+                  className='title-reveal'
+                  style={{
+                    fontFamily:'muli,sans-serif',
+                    fontWeight:'100',
+                    fontSize:45,
+                    letterSpacing:10,
+                    color:'rgba(0,0,0,.8)'
+                  }}
+                >
+                  POPSTORE
+                </Header>
+              </Grid.Column>
 
-                      <Grid.Column 
-                        width={8} 
-                        style={{padding:'0',height:'350px',overflow:'hidden',backgroundColor:'rgb(14, 18, 21)'}}
-                      >
-                          <Image 
-                            // src='/images/men.jpg'
-                            src={MenPic}
-                            style={{
-                              minHeight:'100%',
-                              maxHeight:'115%',
-                              width:'auto',
-                              maxWidth:'unset'
-                            }}
-                          />
-                          <div style={{
-                            position:'absolute',
-                            top:'35%',
-                            right:'2em',
-                            transform:'translate(0,-50%)'
-                          }}>
-                            <Segment 
-                              className='title-reveal'
-                              circular 
-                              style={{
-                                width: 200, 
-                                height: 200, 
-                                // backgroundColor: '#898989'
-                                backgroundColor: 'transparent'
-                              }}
-                            >
-                              <Header as='h2' inverted style={{fontFamily:'muli,sans-serif',fontWeight:'100',fontSize:'36px'}}>
-                                Casual
-                                <Link to='/allproducts/men'>
-                                    <Button inverted className='btn-shopnow' style={{padding:20, marginTop:30, borderWidth:'0.5px',fontWeight:100, textTransform:'uppercase', fontSize:'16px'}}>Shop Now</Button>
-                                </Link>
-                              </Header>
-                            </Segment>
-                          </div>
-                      </Grid.Column>
-                      
-                      <Grid.Column 
-                        width={8} 
-                        style={{
-                          padding:'0',
-                          height:'350px',
-                          overflow:'hidden',
-                          position:'relative',
-                          backgroundColor:'rgba(0,0,0,.88)',
-                          // backgroundImage:`url(https://wallpapercave.com/wp/wp5444493.jpg)`,
-                          // backgroundSize:'contain',
-                          // backgroundRepeat:'no-repeat',
-                          // backgroundPosition:'center'
-                        }}
-                      >
-                        <Image 
-                          src='https://wallpapercave.com/wp/wp5444493.jpg' 
-                          centered
-                          // size='medium'
-                          style={{
-                            position:'absolute',
-                            top:'47%',
-                            left:'70%',
-                            transform:'translate(-50%,-50%)',
-                            width:'280px'
-                          }}  
-                        />
-                        <div style={{
-                            position:'absolute',
-                            top:'65%',
-                            left:'2em',
-                            transform:'translate(0,-50%)'
-                          }}>
-                            <Segment className='title-reveal' circular inverted style={{width: 200, height: 200,backgroundColor:'transparent'}}>
-                              <Header as='h2' inverted style={{fontFamily:'muli,sans-serif',fontWeight:'100',fontSize:'36px'}}>
-                                Sport
-                                <Link to='/allproducts/women'>
-                                    <Button inverted className='btn-shopnow' style={{padding:20, marginTop:30, borderWidth:'0.5px',fontWeight:100, textTransform:'uppercase', fontSize:'16px'}}>Shop Now</Button>
-                                </Link>
-                              </Header>
-                            </Segment>
-                          </div>
-                      </Grid.Column>
+              <Grid.Column 
+                width={8} 
+                style={{padding:'0',height:'350px',overflow:'hidden',backgroundColor:'rgb(14, 18, 21)'}}
+              >
+                  <Image 
+                    // src='/images/men.jpg'
+                    src={MenPic}
+                    style={{
+                      minHeight:'100%',
+                      maxHeight:'115%',
+                      width:'auto',
+                      maxWidth:'unset'
+                    }}
+                  />
+                  <div style={{
+                    position:'absolute',
+                    top:'35%',
+                    right:'2em',
+                    transform:'translate(0,-50%)'
+                  }}>
+                    <Segment 
+                      className='title-reveal'
+                      circular 
+                      style={{
+                        width: 200, 
+                        height: 200, 
+                        // backgroundColor: '#898989'
+                        backgroundColor: 'transparent'
+                      }}
+                    >
+                      <Header as='h2' inverted style={{fontFamily:'muli,sans-serif',fontWeight:'100',fontSize:'36px'}}>
+                        Casual
+                        <Link to='/allproducts/men'>
+                            <Button inverted className='btn-shopnow' style={{padding:20, marginTop:30, borderWidth:'0.5px',fontWeight:100, textTransform:'uppercase', fontSize:'16px'}}>Shop Now</Button>
+                        </Link>
+                      </Header>
+                    </Segment>
+                  </div>
+              </Grid.Column>
+              
+              <Grid.Column 
+                width={8} 
+                style={{
+                  padding:'0',
+                  height:'350px',
+                  overflow:'hidden',
+                  position:'relative',
+                  backgroundColor:'rgba(0,0,0,.88)',
+                  // backgroundImage:`url(https://wallpapercave.com/wp/wp5444493.jpg)`,
+                  // backgroundSize:'contain',
+                  // backgroundRepeat:'no-repeat',
+                  // backgroundPosition:'center'
+                }}
+              >
+                <Image 
+                  src='https://wallpapercave.com/wp/wp5444493.jpg' 
+                  centered
+                  // size='medium'
+                  style={{
+                    position:'absolute',
+                    top:'47%',
+                    left:'70%',
+                    transform:'translate(-50%,-50%)',
+                    width:'280px'
+                  }}  
+                />
+                <div style={{
+                    position:'absolute',
+                    top:'65%',
+                    left:'2em',
+                    transform:'translate(0,-50%)'
+                  }}>
+                    <Segment className='title-reveal' circular inverted style={{width: 200, height: 200,backgroundColor:'transparent'}}>
+                      <Header as='h2' inverted style={{fontFamily:'muli,sans-serif',fontWeight:'100',fontSize:'36px'}}>
+                        Sport
+                        <Link to='/allproducts/women'>
+                            <Button inverted className='btn-shopnow' style={{padding:20, marginTop:30, borderWidth:'0.5px',fontWeight:100, textTransform:'uppercase', fontSize:'16px'}}>Shop Now</Button>
+                        </Link>
+                      </Header>
+                    </Segment>
+                  </div>
+              </Grid.Column>
+            </Grid.Row>
 
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Grid.Column width={16} style={{textAlign:'center'}}>
-                      <Link to='search/recommended'><h2>Recommended Products</h2></Link>
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row>
-                    {this.renderRecommended()}
-                  </Grid.Row>
-                  <Grid.Row>
-                    <Grid.Column width={16} style={{textAlign:'center'}}>
-                      <Link to='search/mostviewed'><h2>Most Viewed Products</h2></Link>
-                    </Grid.Column>
-                  </Grid.Row>
-                  <Grid.Row>
-                    {this.renderMostViewed()}
-                  </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={16} style={{textAlign:'center'}}>
+                <Link to='search/recommended'><h2>Recommended Products</h2></Link>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              {this.renderRecommended()}
+            </Grid.Row>
+            <Grid.Row>
+              <Grid.Column width={16} style={{textAlign:'center'}}>
+                <Link to='search/mostviewed'><h2>Most Viewed Products</h2></Link>
+              </Grid.Column>
+            </Grid.Row>
+            <Grid.Row>
+              {this.renderMostViewed()}
+            </Grid.Row>
 
-                  {/* INDO */}
-                  {/* FLASHSALE */}
-                  <Flashsale/>
+            {/* INDO */}
+            {/* FLASHSALE */}
+            <Flashsale/>
           </Responsive>
+      </div>
     );
   }
 }

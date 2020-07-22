@@ -48,7 +48,7 @@ class MainHeader extends Component {
     
     render() { 
         return (
-          <SegmentGroup>
+          <SegmentGroup style={{margin:'0'}}>
           
             <Responsive
               as={Menu}

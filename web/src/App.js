@@ -6,10 +6,11 @@ import {
   Header,
   Popup,
   Button,
-  Label
+  Icon,
+  Label,
+  Responsive
 } from 'semantic-ui-react'
 import MainHeader from './pages/Header'
-import About from './pages/About'
 import Login from './pages/Login';
 import Register from './pages/Register'
 import Verification from './pages/Verification'
@@ -56,6 +57,8 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
 
   const [fixed,setfixed]=useState(false)
 
+  const [screenWidth,setScreenWidth]=useState('')
+
   useEffect(()=>{
     const token=localStorage.getItem('token')
     if(token){
@@ -90,7 +93,27 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
     }else{
       setLoading(false)
     }
+    checkWidth()
   },[])
+
+  const getWidth = () => {
+    const isSSR = typeof window === 'undefined'
+
+    // console.log(typeof window)
+    // console.log(isSSR)
+    // console.log(Responsive.onlyTablet.minWidth)
+    
+    return isSSR ? Responsive.onlyTablet.minWidth : window.innerWidth
+  }
+
+  const checkWidth=()=>{
+    console.log('check width')
+
+    var width=getWidth()
+    console.log('width',width)
+
+    setScreenWidth(width)
+  }
 
 
   const visitorAccess=!Loading&&!User.islogin
@@ -142,44 +165,13 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
   }
   
   return (
-    <div>
+    <Responsive as={'div'}>
       <MainHeader 
         // fixed={fixed ? 'top' : null}
         inverted
         pointing
         secondary
         size='large'
-      />
-
-      <Popup
-        content={<About/>}
-        basic
-        // header='About'
-        on='click'
-        pinned={true}
-        // flowing
-        position='left center'
-        style={{
-          position:'absolute',
-          top:'65px',
-          right:'100px',
-          // backgroundColor:'rgba(230,230,230,1)'
-        }}
-        trigger={
-          <Label 
-            as='a' 
-            color='orange' 
-            tag
-            style={{
-              position:'absolute',
-              top:'70px',
-              right:'20px',
-              // zIndex:'99'
-            }}
-          >
-            About this app
-          </Label>
-        }
       />
 
       <Switch>
@@ -247,7 +239,7 @@ function App({KeepLogin,LoadCart,LoadPayment,LoadInvoices,LoadOrders,User,KeepSe
 
       </Switch>
 
-    </div>
+    </Responsive>
   );
 }
 
