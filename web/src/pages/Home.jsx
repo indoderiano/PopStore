@@ -293,6 +293,10 @@ class Home extends Component {
               </Grid.Column>
             </Grid.Row>
 
+            {/* INDO */}
+            {/* FLASHSALE */}
+            <Flashsale/>
+
             <Grid.Row>
               <Grid.Column width={16} style={{textAlign:'center'}}>
                 <Link to='search/recommended'><h2>Recommended Products</h2></Link>
@@ -310,9 +314,6 @@ class Home extends Component {
               {this.renderMostViewed()}
             </Grid.Row>
 
-            {/* INDO */}
-            {/* FLASHSALE */}
-            <Flashsale/>
           </Responsive>
       </div>
     );
