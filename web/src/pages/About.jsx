@@ -28,7 +28,7 @@ class About extends Component {
     setTimer=()=>{
         this.timer = setInterval(() => {
             this.setState({tick:!this.state.tick})
-            console.log(!this.state.tick)
+            // console.log(!this.state.tick)
         }, 600);
     }
 

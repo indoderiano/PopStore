@@ -18,12 +18,12 @@ module.exports={
 
     create:(req,res)=>{
         console.log('create flashsale')
-        const {hour}=req.body
+        const {day}=req.body
         
         var time=new Date()
         var year=time.getFullYear()
         var month=time.getMonth()
-        var date=time.getDate()
+        var date=time.getDate()+day
         
 
         // CHECK IF STARTAT ALREADY CREATED
@@ -36,9 +36,9 @@ module.exports={
                 var checkyear=flashsale.startat.getFullYear()
                 var checkmonth=flashsale.startat.getMonth()
                 var checkdate=flashsale.startat.getDate()
-                var checkhour=flashsale.startat.getHours()
+                // var checkhour=flashsale.startat.getHours()
 
-                if( year==checkyear && month==checkmonth && date==checkdate && hour==checkhour){
+                if( year==checkyear && month==checkmonth && date==checkdate ){
                     isexist=true
                 }
             })
@@ -46,9 +46,9 @@ module.exports={
             if(isexist){
                 res.status(200).send({status:false,message:'Flashsale already created'})
             }else{
-
-                var startat=new Date(time.getFullYear(),time.getMonth(),time.getDate(),hour,0,0)
-                var finishat=new Date(time.getFullYear(),time.getMonth(),time.getDate(),hour+2,0,0)
+                // FLASHSALE STARTS AT 6PM
+                var startat=new Date(year,month,date,18,0,0)
+                var finishat=new Date(year,month,date+1,18,0,0)
         
                 var create={
                     startat,

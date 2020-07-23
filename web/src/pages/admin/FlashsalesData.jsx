@@ -53,10 +53,10 @@ class FlashsalesData extends Component {
         })
     }
 
-    onCreateFlashsale=(hour)=>{
+    onCreateFlashsale=(day)=>{
         
         var obj={
-            hour
+            day
         }
         Axios.post(`${APIURL}/flashsales`,obj)
         .then((res)=>{
@@ -108,18 +108,22 @@ class FlashsalesData extends Component {
     }
 
     renderList=()=>{
-        console.log(this.state.list)
+        // console.log(this.state.list)
         return this.state.list.map((val,index)=>{
             var secondstostart=(-Date.parse(this.state.now)+Date.parse(val.startat))/1000
             var secondstofinish=(-Date.parse(this.state.now)+Date.parse(val.finishat))/1000
 
+
+
             // CLOCK FOR ACTIVE FLASHSALE
-            var finishinmins=Math.floor(secondstofinish/60)
             var finishinsecs=secondstofinish%60
+            var finishinmins=Math.floor(secondstofinish/60)%60
+            var finishinhours=Math.floor(secondstofinish/60/60)
 
             // CLOCK UNTIL FLASHSALE START
-            var startinmins=Math.floor(secondstostart/60)
             var startinsecs=secondstostart%60
+            var startinmins=Math.floor(secondstostart/60)%60
+            var startinhours=Math.floor(secondstostart/60/60)
 
             var isstarted=secondstostart<=0
             var isfinished=secondstofinish<=0
@@ -173,13 +177,13 @@ class FlashsalesData extends Component {
                                 :isstarted?
                                 <div style={{display:'inline-flex',padding:'0em 0em',border:'0px solid rgba(255,0,0,.5)',color:'rgb(178,34,34)',background:'rgba(255,0,0,.0)'}}>
                                     <div>Time Remaining</div>
-                                    <span style={{fontWeight:'800',marginLeft:'.5em'}}>{finishinmins} : {finishinsecs<10&finishinsecs>=0?'0'+finishinsecs:finishinsecs}</span>
+                                    <span style={{fontWeight:'800',marginLeft:'.5em'}}>{finishinhours<10&finishinhours>=0?'0'+finishinhours:finishinhours} : {finishinmins<10&finishinmins>=0?'0'+finishinmins:finishinmins} : {finishinsecs<10&finishinsecs>=0?'0'+finishinsecs:finishinsecs}</span>
                                     <Icon name='clock' style={{fontSize:'21px',margin:'0 0 0 .3em'}}/>
                                 </div>
                                 :
                                 <div style={{display:'inline-flex',padding:'0em 0em',border:'0px solid rgba(255,0,0,.5)',color:'rgb(178,34,34)',background:'rgba(255,0,0,.0)'}}>
                                     <div>Time to Start</div>
-                                    <span style={{fontWeight:'800',marginLeft:'.5em'}}>{startinmins} : {startinsecs<10&startinsecs>=0?'0'+startinsecs:startinsecs}</span>
+                                    <span style={{fontWeight:'800',marginLeft:'.5em'}}>{startinhours<10&startinhours>=0?'0'+startinhours:startinhours} : {startinmins<10&startinmins>=0?'0'+startinmins:startinmins} : {startinsecs<10&startinsecs>=0?'0'+startinsecs:startinsecs}</span>
                                     <Icon name='clock' style={{fontSize:'21px',margin:'0 0 0 .3em'}}/>
                                 </div>
                                 // <div><span style={{fontWeight:'800'}}>Flashsale has not started</span></div>
@@ -192,7 +196,7 @@ class FlashsalesData extends Component {
     }
 
     render() {
-        var hourlist=[9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+        var createlist=[0,1,2]
         return (
             <Container style={{paddingTop:'2em',width:'1000px',marginBottom:'4em'}}>
 
@@ -200,7 +204,7 @@ class FlashsalesData extends Component {
                     <Header as={'h3'}>Create Flashsale</Header>
                     <Message>These Buttons only allow to make flashsale schedules on today's date</Message>
                     {
-                        hourlist.map((hour,index)=>{
+                        createlist.map((day,index)=>{
                             return (
                                 <Button
                                     key={index}
@@ -208,10 +212,17 @@ class FlashsalesData extends Component {
                                     basic
                                     style={{margin:'0 1em 1em 0'}}
                                     onClick={()=>{
-                                        this.onCreateFlashsale(hour)
+                                        this.onCreateFlashsale(day)
                                     }}
                                 >
-                                    Hour {hour}
+                                    {
+                                        day==0?
+                                        "Create Today's Flashsale"
+                                        : day==1?
+                                        "Create Tomorrow's Flashsale"
+                                        : 
+                                        "Create The Day After Tomorrow's Flashsale"
+                                    }
                                 </Button>
                             )
                         })

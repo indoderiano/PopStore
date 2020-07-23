@@ -55,14 +55,14 @@ class SellerFlashsale extends Component {
                 ),
                 render: () => <Tab.Pane><FlashsaleRegister/></Tab.Pane>,
             },
-            {
-                menuItem: (
-                    <Menu.Item key='add'>
-                        On Flashsale
-                    </Menu.Item>
-                ),
-                // render: () => <Tab.Pane><DeliveryManage/></Tab.Pane>,
-            },
+            // {
+            //     menuItem: (
+            //         <Menu.Item key='add'>
+            //             On Flashsale
+            //         </Menu.Item>
+            //     ),
+            //     // render: () => <Tab.Pane><DeliveryManage/></Tab.Pane>,
+            // },
             // {
             //     menuItem: (
             //         <Menu.Item key='show'>
