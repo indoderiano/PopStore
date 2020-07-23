@@ -46,9 +46,9 @@ module.exports={
             if(isexist){
                 res.status(200).send({status:false,message:'Flashsale already created'})
             }else{
-                // FLASHSALE STARTS AT 6PM
-                var startat=new Date(year,month,date,18,0,0)
-                var finishat=new Date(year,month,date+1,18,0,0)
+                // FLASHSALE STARTS AT 6PM GMT+7 , SO CREATE 11 GMT+0 
+                var startat=new Date(year,month,date,11,0,0)
+                var finishat=new Date(year,month,date+1,11,0,0)
         
                 var create={
                     startat,
