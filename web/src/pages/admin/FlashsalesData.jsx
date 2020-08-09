@@ -56,7 +56,7 @@ class FlashsalesData extends Component {
     onCreateFlashsale=(day)=>{
         
         var obj={
-            day
+            day:-1
         }
         Axios.post(`${APIURL}/flashsales`,obj)
         .then((res)=>{

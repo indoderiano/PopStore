@@ -10,7 +10,9 @@ import {
     Container,
     Icon,
     Dropdown,
-    Rating
+    Rating,
+    Dimmer,
+    Loader
 } from 'semantic-ui-react'
 import {Link} from 'react-router-dom'
 import {titleConstruct,isJson,getDate,date} from '../../supports/services'
@@ -27,7 +29,9 @@ class FlashsaleRequest extends Component {
         idflashsale:'',
 
         idproductselect:0,
-        errormessage:''
+        errormessage:'',
+
+        loading:false,
 
      }
 
@@ -61,13 +65,14 @@ class FlashsaleRequest extends Component {
             console.log('flashsale item list',res.data)
             var ProductList=listFlashsaleItemsByProduct(res.data)
             console.log('flashsale product list',ProductList)
-            this.setState({list:ProductList})
+            this.setState({list:ProductList,loading:false})
         }).catch((err)=>{
             console.log(err)
         })
     }
 
     onApprove=(idflashsaleproduct)=>{
+        this.setState({loading:true})
         var update={
             isapproved:1
         }
@@ -77,6 +82,8 @@ class FlashsaleRequest extends Component {
             this.getProductList(this.state.idflashsale)
         }).catch((err)=>{
             console.log(err)
+        }).finally(()=>{
+            // this.setState({loading:false})
         })
     }
 
@@ -89,7 +96,7 @@ class FlashsaleRequest extends Component {
                             style={{
                                 width:'100%',
                                 paddingTop:'60%',
-                                backgroundImage:`url(${APIURL+isJson(product.imagecover)[0]})`,
+                                backgroundImage:`url(${isJson(product.imagecover)[0]})`,
                                 backgroundSize:'contain',
                                 backgroundRepeat:'no-repeat',
                                 backgroundPosition:'center',
@@ -139,11 +146,21 @@ class FlashsaleRequest extends Component {
                             <Button
                                 basic
                                 color='blue'
+                                style={{
+                                    position:'relative'
+                                }}
                                 onClick={()=>{
                                     this.onApprove(product.idflashsaleproduct)
                                 }}
                             >
                                 Confirm
+                                {
+                                    this.state.loading?
+                                    <Dimmer active inverted size='mini'>
+                                        <Loader inverted></Loader>
+                                    </Dimmer>
+                                    : null
+                                }
                             </Button>
                             :
                             <Button

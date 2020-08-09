@@ -44,7 +44,7 @@ class About extends Component {
                     This is a simple marketplace commerce app.
                 </p>
                 <p>
-                    Made with React JS with Semantic UI Framework, and Node JS and Express for back-end developmnet. Using db4free.net as mysql database.
+                    Made with React JS with Semantic UI Framework, and Node JS and Express for back-end development. Using db4free.net as mysql database.
                 </p>
                 <p>
                     <span style={{display:'block'}}>Feature,</span>
