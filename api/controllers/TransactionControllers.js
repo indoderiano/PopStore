@@ -301,7 +301,8 @@ module.exports={
         join payment p on p.idpayment=t.idpayment
         join status s on s.idstatus=t.idstatus
         join users u on u.iduser=t.iduser
-        where t.iduser=${iduser} and t.idstatus in (${idstatus})`
+        where t.iduser=${iduser} and t.idstatus in (${idstatus})
+        order by t.updateat`
         db.query(sql,(err,list)=>{
             if(err) return res.status(500).send(err)
 
