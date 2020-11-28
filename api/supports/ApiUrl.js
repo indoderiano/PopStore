@@ -3,5 +3,5 @@
 
 
 module.exports = {
-    APIURL='https://popstore-indo.herokuapp.com'
+    APIURL:'https://popstore-indo.herokuapp.com'
 }
