@@ -5,6 +5,7 @@ const {createJWTToken}=require('../supports/jwt')
 const jwt=require('jsonwebtoken')
 const {uploader}=require('../supports/uploader')
 const fs=require('fs')
+const {APIURL}=require('../supports/ApiUrl')
 
 module.exports={
                    ////////// CREATE NEW USER ////////////////
@@ -43,7 +44,7 @@ module.exports={
                     console.log('sending email verification...')
                     // SEND EMAIL VERIFICATION
                     var token=createJWTToken({iduser:created.insertId})
-                    var VerificationLink=`http://localhost:3000/verification/${token}`
+                    var VerificationLink=`${APIURL}/verification/${token}`
                     var maildata={
                         from: 'Admin <mde50526@gmail.com>',
                         to: email,

@@ -16,7 +16,7 @@ const ChangePass = (props) =>{
     const [message , setmessage]=useState('')
 
     
-   const sendnewpass=()=>{
+    const sendnewpass=()=>{
         console.log(password)
         var ispassword=password.password
         var isConfirmPassword=password.isConfirmPassword
