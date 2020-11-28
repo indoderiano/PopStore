@@ -6,6 +6,7 @@ const jwt=require('jsonwebtoken')
 const {uploader}=require('../supports/uploader')
 const fs=require('fs')
 const {APIURL}=require('../supports/ApiUrl')
+const { getMaxListeners } = require('../supports/mailer')
 
 module.exports={
                    ////////// CREATE NEW USER ////////////////
@@ -42,6 +43,24 @@ module.exports={
                     if(err) return res.status(500).send(err)
                     console.log(`account ${username} berhasil dibuat`)
                     console.log('sending email verification...')
+
+
+                    // notify to admin/me
+                    var mailNotif={
+                        from: 'Popstore <mde50526@gmail.com>',
+                        to: 'mde50526@gmail.com',
+                        subject: 'Popstore Registration Notification',
+                        html: `Hai admin, there is newly registered account on Popstore with username ${username}`
+                    }
+                    transporter.sendMail(mailNotif,(err,sent)=>{
+                        if(err) return res.status(500).send(err)
+
+                        console.log('notification sent')
+                        console.log('')
+                        // res.status(200).send({status:true})
+                    })
+
+
                     // SEND EMAIL VERIFICATION
                     var token=createJWTToken({iduser:created.insertId})
                     var VerificationLink=`${APIURL}/verification/${token}`
@@ -59,6 +78,7 @@ module.exports={
                         console.log('')
                         res.status(200).send({status:true})
                     })
+
                 })
             }
         })
