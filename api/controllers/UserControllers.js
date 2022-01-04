@@ -17,7 +17,8 @@ module.exports={
             username,
             email,
             password: encrypt(password),
-            address
+            address,
+            isverified: true,
         }
         console.log(req.body)
         console.log(userdata)
